@@ -2,6 +2,7 @@ package kr.co.oneusonearth.DiyPost.domain;
 
 
 import jakarta.persistence.*;
+import kr.co.oneusonearth.User.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,12 @@ public class Like {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "post_id")
-    private Long postId;
+    @ManyToOne
+    @JoinColumn
+    private User user;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diypost_id")
+    private DiyPost diyPost;
 
 }

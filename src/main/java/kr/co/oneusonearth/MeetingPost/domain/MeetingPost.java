@@ -1,6 +1,7 @@
 package kr.co.oneusonearth.MeetingPost.domain;
 
 import jakarta.persistence.*;
+import kr.co.oneusonearth.User.domain.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,9 +31,6 @@ public class MeetingPost  {
     @Column(name = "content",nullable = false)
     private  String content;
 
-    @Column(name = "user_id",nullable = false,unique = true)
-    private String UserId;
-
     @Column(name = "thumb_nail")
     private String ThumbNail;
 
@@ -43,6 +41,13 @@ public class MeetingPost  {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private MeetingLocate meetingLocate;
 
     @Builder
     public MeetingPost(String title, String content, String ThumbNail) {

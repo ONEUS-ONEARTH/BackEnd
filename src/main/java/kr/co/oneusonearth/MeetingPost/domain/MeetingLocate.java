@@ -14,8 +14,8 @@ public class MeetingLocate {
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @Column(name = "meeting_post_id")
-    private Long meetingPostId;
+    //@Column(name = "meeting_post_id")
+    //private Long meetingPostId;
 
     @Column(name = "lantitude",nullable = false)
     private Long lantitude;
@@ -24,8 +24,7 @@ public class MeetingLocate {
     private Long longitude;
 
     @Builder
-    public MeetingLocate(Long meetingPostId, Long lantitude, Long longitude) {
-        this.meetingPostId = meetingPostId;
+    public MeetingLocate( Long lantitude, Long longitude) {
         this.lantitude = lantitude;
         this.longitude = longitude;
     }

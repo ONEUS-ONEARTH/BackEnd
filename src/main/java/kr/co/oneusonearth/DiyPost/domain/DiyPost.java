@@ -2,6 +2,7 @@ package kr.co.oneusonearth.DiyPost.domain;
 
 
 import jakarta.persistence.*;
+import kr.co.oneusonearth.User.domain.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,9 +28,6 @@ public class DiyPost {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -41,6 +39,10 @@ public class DiyPost {
     @Column(name = "diy_keywords")
     @ElementCollection
     private List<String> diyKeywords;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     //첫 포스팅할때 쓰이는 빌더
     @Builder

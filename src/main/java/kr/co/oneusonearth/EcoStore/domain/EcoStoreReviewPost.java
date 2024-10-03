@@ -2,6 +2,7 @@ package kr.co.oneusonearth.EcoStore.domain;
 
 
 import jakarta.persistence.*;
+import kr.co.oneusonearth.User.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +32,20 @@ public class EcoStoreReviewPost {
     @Column(name = "img_uri")
     private String imgUri;
 
-    @Column(name = "store_id")
-    private Long storeId;
-
-    @Column(name = "user_id")
-    private Long userId;
 
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private EcoStore ecoStore;
+
+
 
 
 }

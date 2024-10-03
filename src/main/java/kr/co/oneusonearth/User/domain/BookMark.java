@@ -1,6 +1,7 @@
 package kr.co.oneusonearth.User.domain;
 
 import jakarta.persistence.*;
+import kr.co.oneusonearth.DiyPost.domain.DiyPost;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,11 +22,13 @@ public class BookMark   {//UserDetails를 상속잗아 인증 객체로 사용
     @Column(name = "id",updatable = false)
     private Long id;
 
-    @Column(name = "post_id")
-    private Long postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diypost_id")
+    private DiyPost diyPost;
 
 
 }
