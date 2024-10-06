@@ -1,9 +1,12 @@
 
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:mariadb://localhost:3306/onoe
 
-    username: sa
+    username: root
+    password: mariadb
+    driver-class-name: org.mariadb.jdbc.Driver
+
   h2:
     console:
       enabled: true
@@ -13,6 +16,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        hbm2ddl:
+          auto: update
 
     # ??? ?? ?? data.sql ??
     defer-datasource-initialization: true
