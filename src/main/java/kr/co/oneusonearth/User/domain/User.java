@@ -39,17 +39,23 @@ public class User implements UserDetails  {//UserDetails를 상속잗아 인증 
     @Column(name = "adress")
     private String adress;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+
+
 
 
 
     @Builder
-    public User(String name, String nickname, String email, String password,String adress ,String loginMethod) {
+    public User(String name, String nickname, String email, String password,String adress ,String loginMethod,String phoneNumber) {
         this.name = name;
         this.email=email;
         this.loginMethod=loginMethod;
         this.password=password;
         this.nickname=nickname;
         this.adress=adress;
+        this.phoneNumber=phoneNumber;
     }
 
 

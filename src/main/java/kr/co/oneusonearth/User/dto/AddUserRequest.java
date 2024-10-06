@@ -14,5 +14,6 @@ public class AddUserRequest {
     private String email;
     private String password;
     private String adress;
+    private String phoneNumber;
 
 }

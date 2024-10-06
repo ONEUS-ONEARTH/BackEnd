@@ -1,5 +1,6 @@
 package kr.co.oneusonearth.config;
 
+import kr.co.oneusonearth.User.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,8 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final UserDetailsService userDetailsService;
+
+    private final UserDetailService userService;
 
     //스프링 스큐리티 기능 비황성화
     //requestMatchers -> 특정요청과 일치하는 url에 대한 액세스를 설정함
@@ -38,17 +40,16 @@ public class WebSecurityConfig {
         return http
                 .authorizeRequests(auth -> auth
                         .requestMatchers(
-                                new AntPathRequestMatcher("/login"),
-                                new AntPathRequestMatcher("/signup"),
-                                new AntPathRequestMatcher("/user")
+                                new AntPathRequestMatcher("/api/user/login"),
+                                new AntPathRequestMatcher("/api/user/signup")
                         ).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
-                        .loginPage("login")
+                        //.loginPage("login")-> 나는 리액트 기반이라 폼 이름이 들어가면 안됨!
                         .defaultSuccessUrl("/main")
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/api/user/login")
                         .invalidateHttpSession(true)
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -59,10 +60,10 @@ public class WebSecurityConfig {
     //인증 관리자 관련 설정
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                       BCryptPasswordEncoder bCryptPasswordEncoder,UserDetailsService userDetailsService) throws Exception {
+                                                       BCryptPasswordEncoder bCryptPasswordEncoder,UserDetailService userDetailService) throws Exception {
 
         DaoAuthenticationProvider authenticationProvider= new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);//사용자 정보 서비스 설정
+        authenticationProvider.setUserDetailsService(userService);//사용자 정보 서비스 설정
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return new ProviderManager(authenticationProvider);
 
