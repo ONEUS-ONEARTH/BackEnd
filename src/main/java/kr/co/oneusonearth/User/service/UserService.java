@@ -1,18 +1,25 @@
-package kr.co.oneusonearth.User.service;
+package kr.co.oneusonearth.user.service;
 
 
-import kr.co.oneusonearth.User.domain.User;
-import kr.co.oneusonearth.User.dto.AddUserRequest;
-import kr.co.oneusonearth.User.repository.UserRepository;
+import kr.co.oneusonearth.Util.FileUtil;
+import kr.co.oneusonearth.common.BaseException;
+import kr.co.oneusonearth.common.jwt.dto.TokenDto;
+import kr.co.oneusonearth.user.entity.User;
+import kr.co.oneusonearth.user.dto.AddUserRequest;
+import kr.co.oneusonearth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 
 @RequiredArgsConstructor
@@ -21,54 +28,43 @@ import org.springframework.transaction.annotation.Transactional;
 //@Transactional// JPA 사용시 필수
 public class UserService {
 
-    @Autowired
+    //토큰 기간 설정
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
+    //여기경로를 자기 컴퓨터에 맞게 바꿔주세요!
+    private static final String FILEROOTPATH="D:\\Study\\";
+
     private final UserRepository userRepository;
-    @Autowired
     private  final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
+   // private final JwtTokenProvider jwtTokenProvider;
 
     /**
      *
      * 일반회원가입
-     * @param addUserRequest
+     * @param addUserRequestDTO
      * @return Bolean
      */
-    public Boolean singUp(AddUserRequest addUserRequest) {
+    public Boolean singUp(AddUserRequest addUserRequestDTO) throws BaseException {
 
-        Boolean isVaild=checkDTOValid(addUserRequest);
+        Boolean isVaild=checkDTOValid(addUserRequestDTO);
         log.info("isVaild:{}",isVaild);
 
         if(isVaild){
             try{
-                userRepository.save(
-                        User.builder()
-                                .email(addUserRequest.getEmail())
-                                .nickname(addUserRequest.getNickname())
-                                .name(addUserRequest.getName())
-                                .password(bCryptPasswordEncoder.encode(addUserRequest.getPassword()))
-                                .loginMethod("일반")
-                                .phoneNumber(addUserRequest.getPhoneNumber())
-                                .adress(addUserRequest.getAdress())
-                                .build());
-                //이미지 uri
-                //String upload=FileUtl.convertNewPath(addUserRequest.getProfileImage);
-                //aws 처리하고 파일패스 돌려받기
-               // String aws_path=s3Service.uploadToS3Bucket(dto.getProfileImage().getBytes(), upload);
-                log.info("회원가입 성공");
+                log.info(FILEROOTPATH);
+                Path localuploadpath=FileUtil.upload(addUserRequestDTO.getProfile(),FILEROOTPATH);
+                log.info("localuploadpath:{}",localuploadpath);
+                FileUtil.fileUpload(addUserRequestDTO.getProfile(),localuploadpath);
+                User save = userRepository.save(addUserRequestDTO.toEntity(bCryptPasswordEncoder,localuploadpath.toString()));
+                log.info("회원가입 성공, 이미지 저장 버전");
                 return true;
             }catch (NullPointerException e){
-                userRepository.save(
-                        User.builder()
-                                .email(addUserRequest.getEmail())
-                                .nickname(addUserRequest.getNickname())
-                                .name(addUserRequest.getName())
-                                .password(bCryptPasswordEncoder.encode(addUserRequest.getPassword()))
-                                .loginMethod("일반")
-                                .phoneNumber(addUserRequest.getPhoneNumber())
-                                .adress(addUserRequest.getAdress())
-                                .build());
-
+                userRepository.save(addUserRequestDTO.toEntity(bCryptPasswordEncoder,""));
                 log.info("회원가입성공");
                 return  true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
 
@@ -77,6 +73,14 @@ public class UserService {
         return true;
 
     }
+   /* public TokenDto login(String email, String password) {
+        Authentication authentication=authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+        //TokenDto tokenDto= jw
+    }*
+
+    */
 
     /**
      *
