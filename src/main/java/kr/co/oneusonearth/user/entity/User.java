@@ -1,4 +1,4 @@
-package kr.co.oneusonearth.User.domain;
+package kr.co.oneusonearth.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,12 +44,16 @@ public class User implements UserDetails  {//UserDetails를 상속잗아 인증 
     private String phoneNumber;
 
 
+    @Column(name = "img_path")
+    private String imagePath;
+
+
 
 
 
 
     @Builder
-    public User(String name, String nickname, String email, String password,String adress ,String loginMethod,String phoneNumber) {
+    public User(String name, String nickname, String email, String password,String adress ,String loginMethod,String phoneNumber,String imagePath) {
         this.name = name;
         this.email=email;
         this.loginMethod=loginMethod;
@@ -56,6 +61,14 @@ public class User implements UserDetails  {//UserDetails를 상속잗아 인증 
         this.nickname=nickname;
         this.adress=adress;
         this.phoneNumber=phoneNumber;
+        this.imagePath=imagePath;
+    }
+
+
+    public static User of(
+            String name,String nickname, String email, String password, String phoneNumber,String adress,String loginMethod,String imagePath
+    ) {
+        return new User(name,nickname, email, password,adress,loginMethod,phoneNumber,imagePath);
     }
 
 

@@ -1,26 +1,21 @@
 
 spring:
   datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/onoe
 
     username: root
     password: mariadb
-    driver-class-name: org.mariadb.jdbc.Driver
 
-  h2:
-    console:
-      enabled: true
   jpa:
-    # ?? ?? ??
-    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
-        hbm2ddl:
-          auto: update
-
-    # ??? ?? ?? data.sql ??
     defer-datasource-initialization: true
 jwt:
-  issuer: ajufresh@gmail.com
+  issuer: sunkyoung.dev@gmail.com
   secret_key: study-springboot
+  token:

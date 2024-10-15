@@ -1,9 +1,8 @@
-package kr.co.oneusonearth.User.service;
+package kr.co.oneusonearth.user.service;
 
-import kr.co.oneusonearth.User.domain.User;
-import kr.co.oneusonearth.User.repository.UserRepository;
+import kr.co.oneusonearth.user.entity.User;
+import kr.co.oneusonearth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

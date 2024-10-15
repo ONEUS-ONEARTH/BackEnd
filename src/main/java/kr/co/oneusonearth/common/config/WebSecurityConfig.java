@@ -1,6 +1,6 @@
-package kr.co.oneusonearth.config;
+package kr.co.oneusonearth.common.config;
 
-import kr.co.oneusonearth.User.service.UserDetailService;
+import kr.co.oneusonearth.user.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -30,7 +29,6 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers(toH2Console())
                 .requestMatchers(new AntPathRequestMatcher("/static/**"));
 
     }
