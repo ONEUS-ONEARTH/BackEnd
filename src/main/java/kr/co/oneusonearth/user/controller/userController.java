@@ -4,6 +4,7 @@ import kr.co.oneusonearth.common.BaseException;
 import kr.co.oneusonearth.user.dto.AddUserRequest;
 import kr.co.oneusonearth.user.dto.UserLoginRequestDto;
 import kr.co.oneusonearth.user.entity.User;
+import kr.co.oneusonearth.user.exception.NoDuplicateCheckArgumentException;
 import kr.co.oneusonearth.user.service.UserService;
 import kr.co.oneusonearth.exception.DuplicatedAccountException;
 import lombok.RequiredArgsConstructor;
@@ -57,4 +58,22 @@ public class userController {
     }*/
 
     // check:  //phcheck
+
+    @PostMapping("/emailcheck")
+    public ResponseEntity<?> emailCheck(String email,BindingResult result){
+        log.info("email {}",email);
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getFieldError());
+
+        }
+        try{
+            Boolean isEmailExsist=userService.checkEmail(email);
+            ResponseEntity.ok().body(isEmailExsist);
+
+        }catch (NoDuplicateCheckArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return null;
+    }
 }

@@ -1,10 +1,9 @@
-package kr.co.oneusonearth.User.repository;
+package kr.co.oneusonearth.user.repository;
 
-import kr.co.oneusonearth.User.domain.User;
+import kr.co.oneusonearth.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-import java.util.OptionalInt;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -12,6 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     //이메일 중복체크
     Boolean existsUserByEmail(String email);
+    Boolean existsUserByPhoneNumber(String phone);
 
 
 }

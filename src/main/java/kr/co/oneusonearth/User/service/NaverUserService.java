@@ -1,4 +1,4 @@
-package kr.co.oneusonearth.User.service;
+package kr.co.oneusonearth.user.service;
 
 public class NaverUserService {
 }

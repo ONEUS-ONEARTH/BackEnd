@@ -1,17 +1,12 @@
 package kr.co.oneusonearth.MeetingPost.domain;
 
 import jakarta.persistence.*;
-import kr.co.oneusonearth.User.domain.User;
+import kr.co.oneusonearth.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 
 @Table(name = "meeting_post")
 @Entity

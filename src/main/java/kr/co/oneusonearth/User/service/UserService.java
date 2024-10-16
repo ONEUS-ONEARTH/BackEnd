@@ -119,4 +119,7 @@ public class UserService {
 
     }
 
+    public Boolean checkEmail(String email) {
+        return userRepository.existsUserByEmail(email);
+    }
 }

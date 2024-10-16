@@ -1,14 +1,8 @@
-package kr.co.oneusonearth.User.domain;
+package kr.co.oneusonearth.user.entity;
 
 import jakarta.persistence.*;
 import kr.co.oneusonearth.DiyPost.domain.DiyPost;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Table(name = "users")
 @Entity

@@ -2,7 +2,7 @@ package kr.co.oneusonearth.DiyPost.domain;
 
 
 import jakarta.persistence.*;
-import kr.co.oneusonearth.User.domain.User;
+import kr.co.oneusonearth.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
