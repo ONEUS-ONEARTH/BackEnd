@@ -60,7 +60,7 @@ public class userController {
     // check:  //phcheck
 
     @PostMapping("/emailcheck")
-    public ResponseEntity<?> emailCheck(String email,BindingResult result){
+    public ResponseEntity<?> emailCheck(@RequestBody String email,BindingResult result){
         log.info("email {}",email);
         if(result.hasErrors()) {
             return ResponseEntity.badRequest().body(result.getFieldError());
@@ -78,7 +78,7 @@ public class userController {
     }
 
     @PostMapping("/phonecheck")
-    public ResponseEntity<?> phoneCheck(String phone,BindingResult result){
+    public ResponseEntity<?> phoneCheck(@RequestBody String phone,BindingResult result){
         log.info("email {}",phone);
         if(result.hasErrors()) {
             return ResponseEntity.badRequest().body(result.getFieldError());

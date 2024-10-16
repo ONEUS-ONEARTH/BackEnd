@@ -122,4 +122,8 @@ public class UserService {
     public Boolean checkEmail(String email) {
         return userRepository.existsUserByEmail(email);
     }
+
+    public Boolean checkPhone(String phone) {
+        return userRepository.existsUserByPhoneNumber(phone);
+    }
 }
