@@ -76,4 +76,23 @@ public class userController {
 
         return null;
     }
+
+    @PostMapping("/phonecheck")
+    public ResponseEntity<?> phoneCheck(String phone,BindingResult result){
+        log.info("email {}",phone);
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getFieldError());
+
+        }
+        try{
+            Boolean isEmailExsist=userService.checkPhone(phone);
+            ResponseEntity.ok().body(isEmailExsist);
+
+        }catch (NoDuplicateCheckArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return null;
+    }
+
 }
