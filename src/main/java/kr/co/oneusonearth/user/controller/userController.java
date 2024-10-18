@@ -27,7 +27,7 @@ public class userController {
     @Autowired
     private UserService userService;
     @PostMapping("/signup")
-    public ResponseEntity<?> SignUp(@Validated AddUserRequest addUserRequestDTO, BindingResult result) {
+    public ResponseEntity<?> SignUp(@RequestBody AddUserRequest addUserRequestDTO, BindingResult result) {
 
         log.info("비밀번호{}",addUserRequestDTO.getPassword());
         if(result.hasErrors()) {
@@ -85,13 +85,12 @@ public class userController {
         }
         try{
             Boolean isEmailExsist=userService.checkPhone(phone);
-            ResponseEntity.ok().body(isEmailExsist);
+            return ResponseEntity.ok().body(isEmailExsist);
 
         }catch (NoDuplicateCheckArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return null;
     }
 
 }
