@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                 .build();
 
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

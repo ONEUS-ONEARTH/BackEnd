@@ -48,14 +48,14 @@ public class userController {
 
     }
 
-  /*  @PostMapping("/login")
+   @PostMapping("/login")
     public  ResponseEntity<?> login(@RequestBody @Validated UserLoginRequestDto loginRequestDto){
         String email= loginRequestDto.getEmail();
         String password= loginRequestDto.getPassword();
-        //userService
-        return ResponseEntity.ok().body();
 
-    }*/
+        return ResponseEntity.ok().body(userService.login(email,password));
+
+    }
 
     // check:  //phcheck
 

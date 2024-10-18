@@ -3,6 +3,7 @@ package kr.co.oneusonearth.user.service;
 
 import kr.co.oneusonearth.Util.FileUtil;
 import kr.co.oneusonearth.common.BaseException;
+import kr.co.oneusonearth.common.jwt.JwtTokenProvider;
 import kr.co.oneusonearth.common.jwt.dto.TokenDto;
 import kr.co.oneusonearth.user.entity.User;
 import kr.co.oneusonearth.user.dto.AddUserRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class UserService {
     private final UserRepository userRepository;
     private  final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
-   // private final JwtTokenProvider jwtTokenProvider;
+   private final JwtTokenProvider jwtTokenProvider;
 
     /**
      *
@@ -73,15 +75,16 @@ public class UserService {
         return true;
 
     }
-   /* public TokenDto login(String email, String password) {
-        Authentication authentication=authenticationManager.authenticate(
+    public TokenDto login(String email, String password) {
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
-        //TokenDto tokenDto= jw
-    }*
 
-    */
+        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
+
+        return tokenDto;
+    }
     /**
      *
      * @return

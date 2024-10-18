@@ -17,5 +17,5 @@ spring:
     defer-datasource-initialization: true
 jwt:
   issuer: sunkyoung.dev@gmail.com
-  secret_key: study-springboot
-  token:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+

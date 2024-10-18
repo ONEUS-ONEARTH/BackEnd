@@ -1,11 +1,15 @@
 package kr.co.oneusonearth.common.jwt.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
+@Builder
+@Data
 @AllArgsConstructor
 public class TokenDto {
-    private final String accessToken;
-    private final String refreshToken;
+
+    private String grantType;
+    private String accessToken;
+    private String refreshToken;
 }
