@@ -1,6 +1,7 @@
 package kr.co.ouoe.common.jwt;
 
 
+import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.common.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -33,12 +34,12 @@ public class JwtTokenProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    public TokenDto generateToken(Authentication authentication) {
-        return new TokenDto("Bearer",generateAccessToken(authentication), generateRefreshToken(authentication));
+    public TokenDto generateToken(Authentication authentication,User user) {
+        return new TokenDto("Bearer",generateAccessToken(authentication,user), generateRefreshToken(authentication));
     }
 
-    //엑세스토큰을 만드는 함수
-    public String generateAccessToken(Authentication authentication) {
+    //엑세스토큰을 만드는 함수: 비공개 클레임 (유저 email)
+    public String generateAccessToken(Authentication authentication, User user) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
 
         Date now = new Date();
@@ -48,10 +49,11 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiresIn)
-                .signWith(SignatureAlgorithm.HS256, key)
+                .claim("email",user.getEmail())// 클레임 email: 유저 이메일
+                .signWith(SignatureAlgorithm.HS256, key)//서명: 비밀값고 함께 해시값을 HS256으로 암호화
                 .compact();
     }
-
+    //리프레시 토큰을 만드는 함수
     public String generateRefreshToken(Authentication authentication) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
 
@@ -74,6 +76,12 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userPrincipal, "", userPrincipal.getAuthorities());
     }
 
+    //토큰 기반으로 유저 email을 가져옴
+    public String getUserEmail(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("email", String.class);
+    }
+
     public Claims parseClaims(String token) {
         try {
             return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
@@ -82,6 +90,11 @@ public class JwtTokenProvider {
         }
     }
 
+    private Claims getClaims(String token) {
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+    }
+
+    //JWT 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(key).parseClaimsJws(token);

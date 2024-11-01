@@ -47,6 +47,10 @@ public class User implements UserDetails  {//UserDetails를 상속잗아 인증 
     private String imagePath;
 
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
+
 
 
 
