@@ -22,6 +22,7 @@ public class LoginUserResponseDTO {
     private  String profileImg;
     private TokenDto token;
 
+    //최초로그인시
     public LoginUserResponseDTO(User user, TokenDto tokenDto) {
         this.nickname = user.getNickname();
         this.email = user.getEmail();
@@ -32,4 +33,16 @@ public class LoginUserResponseDTO {
         this.password = user.getPassword();
         this.token = tokenDto;
     }
+
+    //마이페이지에서 정보를 불러올때,
+    public LoginUserResponseDTO(User user) {
+        this.nickname = user.getNickname();
+        this.email = user.getEmail();
+        this.profileImg=user.getImagePath();
+        this.name = user.getName();
+        this.phoneNumber = user.getPhoneNumber();
+        this.adress = user.getAdress();
+        this.password = user.getPassword();
+    }
+
 }
