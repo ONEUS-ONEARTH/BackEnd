@@ -1,6 +1,8 @@
 package kr.co.ouoe.User.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import kr.co.ouoe.Util.TokenProvider;
+import kr.co.ouoe.common.jwt.JwtTokenProvider;
 import kr.co.ouoe.common.jwt.dto.TokenDto;
 import kr.co.ouoe.User.dto.GoogleAccessTokenDTO;
 import kr.co.ouoe.User.dto.GoogleInfoDTO;
@@ -29,8 +31,6 @@ public class GoogleUserService {
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     String clientId;
 
-//    @Value("${spring.security.oauth2.client.registration.google.redirect_uri}")
-//    String redirectUri;
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     String clientSecret;
@@ -44,6 +44,8 @@ public class GoogleUserService {
 
     static final String googleAuthUri="https://oauth2.googleapis.com/token";
     static final String gooleAPI="https://www.googleapis.com/oauth2/v2/userinfo";
+
+    private final TokenProvider tokenProvider;
     private  final BCryptPasswordEncoder bCryptPasswordEncoder;
     //accessToken을 가지고 정보를 가져오는 메서드
     public GoogleLoginUserResponseDTO callGoogleAPI(GoogleAccessTokenDTO googleAccessTokenDTO){
@@ -73,7 +75,7 @@ public class GoogleUserService {
                 User googleUser= googleLoginUserResponseDTO.toEntity(bCryptPasswordEncoder,googleInfoDTO);
                 userRepository.save(googleUser);
                 //2 tokenDTO 저장
-                TokenDto tokenDto=new TokenDto(googleAccessTokenDTO.getTokenType(),googleAccessTokenDTO.getAccessToken(),googleAccessTokenDTO.getRefreshToken());
+                TokenDto tokenDto=new TokenDto(googleAccessTokenDTO.getTokenType(), tokenProvider.createToken(googleUser), tokenProvider.generateRefreshToken(googleUser));
                 return new GoogleLoginUserResponseDTO(googleUser,tokenDto);
 
             }

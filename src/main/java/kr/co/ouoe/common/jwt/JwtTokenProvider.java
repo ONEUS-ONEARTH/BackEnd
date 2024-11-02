@@ -1,6 +1,7 @@
 package kr.co.ouoe.common.jwt;
 
 
+import kr.co.ouoe.User.dto.TokenUserInfo;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.common.jwt.dto.TokenDto;
 import io.jsonwebtoken.*;
@@ -26,6 +27,9 @@ public class JwtTokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
     private final Key key;
     private final UserDetailsService userDetailsService;
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
                             @Autowired UserDetailsService userDetailsService
@@ -53,9 +57,43 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, key)//서명: 비밀값고 함께 해시값을 HS256으로 암호화
                 .compact();
     }
+
+
+    //액세스 토큰 만드는 함수2
+    public String generateAccessToken( User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+
+        Date now = new Date();
+        Date expiresIn = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiresIn)
+                .claim("id",user.getId())// 클레임 email: 유저 이메일
+                .signWith(SignatureAlgorithm.HS256, key)//서명: 비밀값고 함께 해시값을 HS256으로 암호화
+                .compact();
+    }
+
+
     //리프레시 토큰을 만드는 함수
     public String generateRefreshToken(Authentication authentication) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
+
+        Date now = new Date();
+        Date expiresIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiresIn)
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+    }
+
+    //리프레시 토큰을 만드는 함수
+    public String generateRefreshToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
 
         Date now = new Date();
         Date expiresIn = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
@@ -109,4 +147,13 @@ public class JwtTokenProvider {
         long now = new Date().getTime();
         return expiration.getTime() - now;
     }
+
+    /**
+     * 클라이언트가 전송한 토큰을 디코딩하여 토큰의 위조여부를 확인
+     * 토큰을 json으로 파싱해서 클레임(토큰정보)를 리턴
+     * @param token
+     * @return - 토큰 안에있는 인증된 유저정보를 반환
+     */
+
+
 }

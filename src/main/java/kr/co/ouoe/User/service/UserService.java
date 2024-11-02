@@ -2,6 +2,7 @@ package kr.co.ouoe.User.service;
 
 
 import kr.co.ouoe.Util.FileUtil;
+import kr.co.ouoe.Util.TokenProvider;
 import kr.co.ouoe.common.BaseException;
 import kr.co.ouoe.common.jwt.JwtTokenProvider;
 import kr.co.ouoe.common.jwt.dto.TokenDto;
@@ -13,6 +14,8 @@ import kr.co.ouoe.User.exception.NoLoginArgumentsException;
 import kr.co.ouoe.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +27,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 
-@RequiredArgsConstructor
+
 @Service
 @Slf4j //로그
 @Transactional// JPA 사용시 필수
@@ -39,9 +42,14 @@ public class UserService {
     private static final String basicProFilePath="D:\\Study\\FrontEnd\\public\\assets";
 
     private final UserRepository userRepository;
-    private  final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+    private  final BCryptPasswordEncoder bCryptPasswordEncoder;//-> 순환참조의 원인 근데 이게 없으면 어떻게..?
+    private final TokenProvider tokenProvider;
+    public UserService(UserRepository userRepository, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider tokenProvider /* other dependencies */) {
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.tokenProvider = tokenProvider;
+    }
+
 
     /**
      *
@@ -60,7 +68,7 @@ public class UserService {
                 Path localuploadpath= FileUtil.upload(addUserRequestDTO.getImageFile(),FILEROOTPATH);
                 log.info("localuploadpath:{}",localuploadpath);
                 FileUtil.fileUpload(addUserRequestDTO.getImageFile(),localuploadpath);
-                User save = userRepository.save(addUserRequestDTO.toEntity(bCryptPasswordEncoder,localuploadpath.toString()));
+               User save = userRepository.save(addUserRequestDTO.toEntity(bCryptPasswordEncoder,localuploadpath.toString()));
                 log.info("회원가입 성공, 이미지 저장 버전");
                 return true;
             }catch (NullPointerException e){
@@ -91,14 +99,13 @@ public class UserService {
             throw new IncorrectPasswordException("비밀번호가 틀렸습니다.");
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
-
-        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
-
-
+//        //토큰 dto설정
+        TokenDto tokenDto=new TokenDto("Bearer",tokenProvider.createToken(user), tokenProvider.generateRefreshToken(user));
+        //token dto에 있는 리프레시토큰 db에 저장
+        user.setRefreshToken(tokenDto.getRefreshToken());
+//
         return new LoginUserResponseDTO(user,tokenDto);
+//        return null;
     }
     /**
      *
@@ -140,6 +147,16 @@ public class UserService {
     public Boolean checkEmail(String email) {
         log.info("중복여부 {}",userRepository.existsByEmail(email));
         return userRepository.existsByEmail(email);
+    }
+
+
+    //user_id(emailX)로 유저찾기
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public User findByEmaild(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public Boolean checkPhone(String phone) {
