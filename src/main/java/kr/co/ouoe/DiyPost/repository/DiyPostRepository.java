@@ -3,6 +3,8 @@ package kr.co.ouoe.DiyPost.repository;
 
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +18,6 @@ public interface DiyPostRepository extends JpaRepository<DiyPost, Long> {
             "dp.id ,dp.title, dp.content,dp.user.nickname,dp.createdAt)"+
             "from DiyPost dp")
     List<PostResponseDTO> findAllPostResponseDTO();
+
+    Page<DiyPost> findAll(Pageable pageable);
 }
