@@ -65,8 +65,16 @@ public class GoogleUserService {
         //이메일 존재를 확인하기
         try{
             if(checkEmail(email)){
+                if(checkLoginMethod(email).equals("구글")){
+                    //이미 구글로 로그인 한 회원이면, 로그인 시킴.
+                    User googleUser=userRepository.findByEmail(email);
+                    TokenDto tokenDto=new TokenDto(googleAccessTokenDTO.getTokenType(), tokenProvider.createToken(googleUser), tokenProvider.generateRefreshToken(googleUser));
+                    return new GoogleLoginUserResponseDTO(googleUser,tokenDto);
+
+                }
+
                 //이미 일반회원으로 존재한다는 메시지
-                throw new DuplicateEmailException("이미 일반회원으로 가입하셨습니다. 다시 로그인 해주세요!");
+                else{throw new DuplicateEmailException("이미 일반회원으로 가입하셨습니다. 다시 로그인 해주세요!");}
 
             }else{
                 //1.회원가입
@@ -91,6 +99,10 @@ public class GoogleUserService {
     public Boolean checkEmail(String email) {
         log.info("중복여부 {}",userRepository.existsByEmail(email));
         return userRepository.existsByEmail(email);
+    }
+
+    public String checkLoginMethod(String email) {
+        return userRepository.findByEmail(email).getLoginMethod().toString();
     }
 
 
