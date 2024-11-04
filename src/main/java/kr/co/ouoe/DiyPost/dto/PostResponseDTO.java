@@ -26,7 +26,7 @@ public class PostResponseDTO {
         this.id = diyPost.getId();
         this.title = diyPost.getTitle();
         this.content = diyPost.getContent();
-        this.author=diyPost.getUser().getNickname();
+        //this.author=diyPost.getUser().getNickname();
         this.createdDate = diyPost.getCreatedAt();
     }
 }

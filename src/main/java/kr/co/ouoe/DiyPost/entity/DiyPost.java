@@ -30,6 +30,9 @@ public class DiyPost {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "thumbnailurl")
+    private String thumbnailurl;
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -38,20 +41,25 @@ public class DiyPost {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "tag")
+    private String tag;
+
     @Column(name = "diy_keywords")
     @ElementCollection
     private List<String> diyKeywords;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id",nullable = false)
+    Long userId;
 
     //첫 포스팅할때 쓰이는 빌더
     @Builder
-    public DiyPost(String title, String content, LocalDateTime createdAt) {
+    public DiyPost(String title, String content, LocalDateTime createdAt,String thumbnailurl,String tag,Long userId) {
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
+        this.thumbnailurl = thumbnailurl;
+        this.userId=userId;
+        this.tag=tag;
 
     }
 
