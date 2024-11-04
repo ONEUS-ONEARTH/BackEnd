@@ -38,7 +38,13 @@ public class userInfoController {
        // log.info(user.toString());
         User user = userInfoservice.getUserInfo(userAccount.getEmail());
         log.info("user info : {}", user.getName());
+        log.info("user info : {}", user.getImagePath());
+        log.info("user info : {}", user.getAdress());
+        log.info("user info : {}", user.getPassword());
+        log.info("user info : {}", user.getPhoneNumber());
+        log.info("user info : {}", user.getNickname());
         LoginUserResponseDTO loginUserResponseDTO = new LoginUserResponseDTO(user);
+        log.info("loginUserResponseDTO: {}", loginUserResponseDTO);
         return ResponseEntity.ok().body(loginUserResponseDTO);
         //return null;
     }
