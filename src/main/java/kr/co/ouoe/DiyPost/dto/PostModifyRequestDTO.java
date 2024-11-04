@@ -10,12 +10,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostRequestDTO {
+public class PostModifyRequestDTO {
 
+    private Long postId;
     private String title;
     private String content;
     private String tag;
     private String thumbnailUrl;
-
-
 }

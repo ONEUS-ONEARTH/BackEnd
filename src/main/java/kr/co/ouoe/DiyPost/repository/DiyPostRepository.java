@@ -14,8 +14,13 @@ public interface DiyPostRepository extends JpaRepository<DiyPost, Long> {
 
     // 쿼리 설정으로 모든 레파지토리 키워드랑, 좋아요 수 불러와야함.
     //네이티브 쿼리로 작성해보기
-    //List<PostResponseDTO> findAll();
-    
+
+    @Query("Select new kr.co.ouoe.DiyPost.dto.PostResponseDTO(" +
+            "d)from DiyPost d")
+    List<PostResponseDTO> findAllPostResponseDTO();
+
+    DiyPost findByIdAndUserId(Long postId, Long userId);
+
 
     Page<DiyPost> findAll(Pageable pageable);
 }

@@ -2,6 +2,7 @@ package kr.co.ouoe.DiyPost.service;
 
 
 import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
+import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
@@ -33,13 +34,13 @@ public class upcyclePostService {
     private  final LikeRepository likeRepository;
 
     //게시물 불러오기
-//    public  PostListResponseDTO searchAllPost(){
-//        List<PostResponseDTO> postList=diyPostRepository.findAll();
-//        return PostListResponseDTO.builder()
-//                .boards(postList)
-//                .build();
-//
-//    }
+    public  PostListResponseDTO searchAllPost(){
+        List<PostResponseDTO> postList=diyPostRepository.findAllPostResponseDTO();
+        return PostListResponseDTO.builder()
+                .boards(postList)
+                .build();
+
+    }
 
     //페이징 처리된 보드 불러오기
     public List<PostResponseDTO> searchPostListWithPage(int pageNo){
@@ -70,7 +71,7 @@ public class upcyclePostService {
     //upcycle 포스트 등록
     public PostListResponseDTO createPost(PostRequestDTO postRequestDTO, String email) {
 
-
+        log.info(postRequestDTO.getTitle());
         User user=userRepository.findByEmail(email);
         if(user==null){
             return null;
@@ -78,49 +79,49 @@ public class upcyclePostService {
 
         //Diypost 저장,태그까지 저장
         LocalDateTime createDateTime=LocalDateTime.now();
-        DiyPost newDiyPost= new DiyPost(postRequestDTO.getTitile(), postRequestDTO.getContent(),createDateTime, postRequestDTO.getThumbnailUrl(), postRequestDTO.getTag(),user.getId());
+        DiyPost newDiyPost= new DiyPost(postRequestDTO.getTitle(), postRequestDTO.getContent(),createDateTime, postRequestDTO.getThumbnailUrl(), postRequestDTO.getTag(),user.getId());
         diyPostRepository.save(newDiyPost);
 
-        return null;
+        return searchAllPost();
 
     }
 
-    //보드 삭제 처리
-//    public PostListResponseDTO delete(String email, Long boardNo) {
-//        try {
-//            // 보드를 찾기
-//            DiyPost board = diyPostRepository.findByUserIdAndPostId(email, boardNo);
-//            if (board == null) {
-//                log.warn("삭제할 보드를 찾을 수 없습니다. 계정: {}, 보드 번호: {}", account, boardNo);
-//                return null;
-//            }
-//
-//            // 보드가 특정 사용자의 플레이 리스트에 담겨져 있는지 확인
-//            List<PlayList> playlists = playListRepository.findByBoard(board);
-//
-//            // 보드를 null로 설정한 후에 해당 플레이 리스트를 삭제하고 scoreCount를 감소시킴
-//            for (PlayList playlist : playlists) {
-//                playlist.setBoard(null);
-//                playListRepository.delete(playlist);
-//
-//                AllPlayList plId = playlist.getPlId();
-//                plId.setScoreCount(plId.getScoreCount() -1);
-//                allPlayListRepository.save(plId);
-//            }
-//
-//            // 좋아요와 싫어요 데이터를 삭제
-//            likeAndDislikeRepository.deleteByBoard(board);
-//
-//            // 보드를 삭제
-//            boardRepository.deleteById(boardNo);
-//
-//            log.info("보드 삭제 성공. 계정: {}, 보드 번호: {}", account, boardNo);
-//        } catch (Exception e) {
-//            log.error("보드 삭제 중 오류 발생. 계정: {}, 보드 번호: {}", account, boardNo, e);
-//        }
-//        return searchAllPost();
-//    }
+    //pucycle 포스트 수정
+    public boolean modifyPost(PostModifyRequestDTO modifyRequestDTO) {
+        DiyPost diyPost=diyPostRepository.getOne(modifyRequestDTO.getPostId());
+        //String user= userRepository.findById(diyPost.getUserId());
+        diyPost.setTitle(modifyRequestDTO.getTitle());
+        diyPost.setContent(modifyRequestDTO.getContent());
+        diyPost.setTag(modifyRequestDTO.getTag());
+        diyPost.setThumbnailurl(modifyRequestDTO.getThumbnailUrl());
+        return true;
 
+    }
+
+
+    //보드 삭제 처리
+    public PostListResponseDTO delete(String useremail, Long boardNo) {
+        try {
+            //유저 찾기
+            User user=userRepository.findByEmail(useremail);
+            // 보드를 찾기
+            DiyPost post = diyPostRepository.findByIdAndUserId(user.getId(),boardNo);
+            if (post == null) {
+                log.warn("삭제할 보드를 찾을 수 없습니다. 계정: {}, 보드 번호: {}", useremail, boardNo);
+                return null;
+            }
+
+
+            // 보드를 삭제
+            diyPostRepository.deleteById(boardNo);
+
+            log.info("보드 삭제 성공. 계정: {}, 보드 번호: {}", useremail, boardNo);
+        } catch (Exception e) {
+            log.error("보드 삭제 중 오류 발생. 계정: {}, 보드 번호: {}",useremail, boardNo, e);
+        }
+        return searchAllPost();
+    }
+//
 
 
 }
