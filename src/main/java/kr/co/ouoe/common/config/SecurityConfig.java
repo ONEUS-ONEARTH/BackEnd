@@ -38,7 +38,8 @@ public class SecurityConfig {
                 // 모든요청에 대해서 인증을 하지 않겠다.
                 .authorizeRequests( auth->auth
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/user/**")
+                                new AntPathRequestMatcher("/api/user/**"),
+                                new AntPathRequestMatcher("/api/upcycle/posts")
                         ).permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout
