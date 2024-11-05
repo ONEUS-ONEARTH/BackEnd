@@ -36,6 +36,13 @@ public class upcyclePostService {
     //게시물 불러오기
     public  PostListResponseDTO searchAllPost(){
         List<PostResponseDTO> postList=diyPostRepository.findAllPostResponseDTO();
+        
+        //닉네임 찾아서 넣어주기
+        for(PostResponseDTO post:postList){
+            String nickname=userRepository.findById(post.getId()).get().getNickname();
+            post.setAuthor(nickname);
+        }
+        
         return PostListResponseDTO.builder()
                 .boards(postList)
                 .build();
