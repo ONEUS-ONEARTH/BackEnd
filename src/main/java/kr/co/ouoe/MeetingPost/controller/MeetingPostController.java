@@ -35,6 +35,8 @@ public class MeetingPostController {
 
     //모임 지역별로 불러오기
 
+
+
     //모임 포스트 작성하기
     @PostMapping("/createmeeting")
     public ResponseEntity<?> createPost(@RequestBody MeetingPostRequest meetingPostRequest, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
@@ -55,6 +57,28 @@ public class MeetingPostController {
 
     //모임 포스트 수정하기
 
+
+
+
     //모임 포스트 삭제하기
-    
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> deletePost(@PathVariable Long postId, @AuthenticationPrincipal TokenUserInfo tokenUserInfo){
+        if (postId == null || postId.equals("")){
+            return ResponseEntity
+                    .badRequest()
+                    .body(PostListResponseDTO.builder().error("postId는 공백 일 수 없습니다!").build());
+        }
+        try{
+            MeetingListResponseDTO meetingListResponseDTO=meetingPostService.delete(tokenUserInfo.getEmail(),postId);
+            return  ResponseEntity.ok().body(meetingListResponseDTO);
+        }catch (Exception e){
+            return ResponseEntity
+                    .internalServerError()
+                    .body(PostListResponseDTO.builder().error(e.getMessage()).build());
+        }
+
+    }
+
+
 }

@@ -68,5 +68,27 @@ public class MeetingPostService {
 
     }
 
+    //미팅 포스트 삭제
+    public MeetingListResponseDTO delete(String useremail, Long boardNo) {
+        try {
+            //유저 찾기
+            User user=userRepository.findByEmail(useremail);
+            // 보드를 찾기
+            MeetingPost post = meetingPostRepository.findByIdAndUserId(user.getId(),boardNo);
+            if (post == null) {
+                log.warn("삭제할 보드를 찾을 수 없습니다. 계정: {}, 보드 번호: {}", useremail, boardNo);
+                return null;
+            }
+
+            // 보드를 삭제
+            meetingPostRepository.deleteById(boardNo);
+
+            log.info("보드 삭제 성공. 계정: {}, 보드 번호: {}", useremail, boardNo);
+        } catch (Exception e) {
+            log.error("보드 삭제 중 오류 발생. 계정: {}, 보드 번호: {}",useremail, boardNo, e);
+        }
+        return searchAllMeeting();
+    }
+
 
 }
