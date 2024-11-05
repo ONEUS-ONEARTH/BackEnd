@@ -16,7 +16,7 @@ public interface DiyPostRepository extends JpaRepository<DiyPost, Long> {
     //네이티브 쿼리로 작성해보기
 
     @Query("Select new kr.co.ouoe.DiyPost.dto.PostResponseDTO(" +
-            "d)from DiyPost d")
+            "d )from DiyPost d")
     List<PostResponseDTO> findAllPostResponseDTO();
 
     DiyPost findByIdAndUserId(Long postId, Long userId);

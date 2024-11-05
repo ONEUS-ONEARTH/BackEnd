@@ -37,18 +37,20 @@ public class MeetingPost  {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+   @Column(name = "user_id",nullable = false)
+   private Long userId;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private MeetingLocate meetingLocate;
+   @Column(name = "meeting_locate_id",nullable = false)
+   private Long meetingLocateId;
+
 
     @Builder
-    public MeetingPost(String title, String content, String ThumbNail) {
+    public MeetingPost(String title, String content,LocalDateTime createdAt, String ThumbNail,long userId) {
         this.title = title;
         this.content = content;
         this.ThumbNail = ThumbNail;
+        this.createdAt = createdAt;
+        this.userId=  userId;
     }
 
 
