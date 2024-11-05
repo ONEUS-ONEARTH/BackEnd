@@ -21,6 +21,7 @@ public class PostResponseDTO {
     private  String content;
     private  String author;
     private String tag;
+    private long userId;
     private LocalDateTime createdDate;
 
     public PostResponseDTO(DiyPost diyPost) {
@@ -28,6 +29,7 @@ public class PostResponseDTO {
         this.title = diyPost.getTitle();
         this.tag= diyPost.getTag();
         this.content = diyPost.getContent();
+        this.userId = diyPost.getUserId();
         //this.author=diyPost.getUser().getNickname();
         this.createdDate = diyPost.getCreatedAt();
     }

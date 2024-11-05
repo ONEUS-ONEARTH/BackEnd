@@ -39,7 +39,7 @@ public class upcyclePostService {
         
         //닉네임 찾아서 넣어주기
         for(PostResponseDTO post:postList){
-            String nickname=userRepository.findById(post.getId()).get().getNickname();
+            String nickname=userRepository.findById(post.getUserId()).get().getNickname();
             post.setAuthor(nickname);
         }
         
