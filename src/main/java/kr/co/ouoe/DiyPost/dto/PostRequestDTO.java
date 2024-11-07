@@ -16,6 +16,7 @@ public class PostRequestDTO {
     private String content;
     private String tag;
     private String thumbnailUrl;
+    private int likeScore;
 
 
 }

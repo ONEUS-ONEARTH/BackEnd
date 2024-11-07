@@ -6,6 +6,7 @@ import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
+import kr.co.ouoe.DiyPost.entity.Like;
 import kr.co.ouoe.DiyPost.repository.DiyMeterialRepository;
 import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
 import kr.co.ouoe.DiyPost.repository.LikeRepository;
