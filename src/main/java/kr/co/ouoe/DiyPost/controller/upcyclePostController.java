@@ -61,6 +61,24 @@ public class upcyclePostController {
 
     }
 
+
+    // 업사이클 스코어 올리는 로직
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<?> updateLikeScore (@PathVariable Long postId,@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
+        if (postId == null || postId.equals("")){
+            return ResponseEntity
+                    .badRequest()
+                    .body(PostListResponseDTO.builder().error("postId는 공백 일 수 없습니다!").build());
+        }
+        if(tokenUserInfo==null){
+            return ResponseEntity.badRequest().body("로그인 후 이용하실수 있어요!");
+        }
+        upcyclePostService.updateLikeScore(postId);
+
+        return null;
+    }
+
+
     //업사이클 게시물을 올리는 로직
     @PostMapping("/createpost")
     public ResponseEntity<?> createPost(@RequestBody PostRequestDTO postRequestDTO, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){

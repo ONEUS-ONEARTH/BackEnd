@@ -21,6 +21,9 @@ public interface DiyPostRepository extends JpaRepository<DiyPost, Long> {
 
     DiyPost findByIdAndUserId(Long postId, Long userId);
 
+    @Query("Select new kr.co.ouoe.DiyPost.dto.PostResponseDTO(" +
+            "d )from DiyPost d where d.userId=:userId")
+    List<PostResponseDTO> findAllByuserId(long userId);
 
     Page<DiyPost> findAll(Pageable pageable);
 }

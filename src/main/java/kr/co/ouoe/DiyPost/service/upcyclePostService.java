@@ -10,6 +10,7 @@ import kr.co.ouoe.DiyPost.entity.Like;
 import kr.co.ouoe.DiyPost.repository.DiyMeterialRepository;
 import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
 import kr.co.ouoe.DiyPost.repository.LikeRepository;
+import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -143,6 +144,16 @@ public class upcyclePostService {
         } catch (Exception e) {
             log.error("보드 삭제 중 오류 발생. 계정: {}, 보드 번호: {}",useremail, boardNo, e);
         }
+        return searchAllPost();
+    }
+
+    //포스트 좋아요 업데이트
+    public PostListResponseDTO updateLikeScore(long postId){
+
+        DiyPost diyPost=diyPostRepository.getOne(postId);
+        int likeSocre=diyPost.getLikeScore();
+        diyPost.setLikeScore(likeSocre+1);
+
         return searchAllPost();
     }
 //
