@@ -51,6 +51,9 @@ public class DiyPost {
     @Column(name = "user_id",nullable = false)
     Long userId;
 
+    @Column(name = "like_score",nullable = false)
+    private int likeScore = 0;
+
     //첫 포스팅할때 쓰이는 빌더
     @Builder
     public DiyPost(String title, String content, LocalDateTime createdAt,String thumbnailurl,String tag,Long userId) {
