@@ -36,6 +36,23 @@ public class upcyclePostController {
 
     }
 
+    //업싸이클 디테일 보여주는 로직
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<?> showPostDeatil (@PathVariable Long postId){
+        if (postId == null || postId.equals("")){
+            return ResponseEntity
+                    .badRequest()
+                    .body(PostListResponseDTO.builder().error("postId는 공백 일 수 없습니다!").build());
+        }try{
+            PostResponseDTO postResponseDTO=upcyclePostService.searchPostById(postId);
+            return ResponseEntity.ok().body(postResponseDTO);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
+    }
+
     //업사이클 게시물을 올리는 로직
     @PostMapping("/createpost")
     public ResponseEntity<?> createPost(@RequestBody PostRequestDTO postRequestDTO, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
@@ -67,6 +84,8 @@ public class upcyclePostController {
         }
 
     }
+
+
 
     //  포스트 삭제 요청
     @DeleteMapping("/{postId}")

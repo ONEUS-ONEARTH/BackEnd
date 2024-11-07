@@ -50,6 +50,22 @@ public class upcyclePostService {
 
     }
 
+    public  PostResponseDTO searchPostById(Long id){
+
+        DiyPost diyPost=diyPostRepository.getOne(id);
+        User user=userRepository.getOne(diyPost.getUserId());
+        PostResponseDTO postResponseDTO=PostResponseDTO.builder()
+                .id(diyPost.getId())
+                .title(diyPost.getTitle())
+                .content(diyPost.getContent())
+                .createdDate(diyPost.getCreatedAt())
+                .author(user.getNickname())
+                .tag(diyPost.getTag())
+                .build();
+        return postResponseDTO;
+    }
+
+
     //페이징 처리된 보드 불러오기
     public List<PostResponseDTO> searchPostListWithPage(int pageNo){
         PageRequest pageRequest=PageRequest.of(pageNo,6, Sort.by("postUpdateDateTime").descending());
