@@ -2,8 +2,10 @@ package kr.co.ouoe.MeetingPost.controller;
 
 
 import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
+import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
+import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
 import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
 import kr.co.ouoe.MeetingPost.service.MeetingPostService;
@@ -15,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +39,18 @@ public class MeetingPostController {
     }
 
     //모임 지역별로 불러오기
+    //si-> 시
+    //doo-> 도
+    //gu-> 구
+    @GetMapping("/search")
+    public ResponseEntity<?> searchAllMeeting(@RequestParam String si, @RequestParam String doo, @RequestParam String gu){
+        log.info("searchAllMeeting");
+        //어떻게 받아오지...?
+
+
+        return null;
+
+    }
 
 
 
@@ -48,7 +65,7 @@ public class MeetingPostController {
         }
         try{
             MeetingListResponseDTO meetingListResponseDTO=meetingPostService.createMeeting(meetingPostRequest,tokenUserInfo.getEmail());
-            return ResponseEntity.ok().body(meetingPostRequest);
+            return ResponseEntity.ok().body(meetingListResponseDTO);
         }catch(Exception e){
             log.error(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -57,6 +74,17 @@ public class MeetingPostController {
 
     //모임 포스트 수정하기
 
+    @RequestMapping(method = {PUT,PATCH},path = "/modify")
+    public ResponseEntity<?> UpdatePost(@RequestBody MeetingPostModifyRequestDTO modifyRequestDTO){
+
+        try{
+            boolean isupdate=meetingPostService.modifyPost(modifyRequestDTO);
+            return ResponseEntity.ok().body(isupdate);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
 
 
 

@@ -8,6 +8,7 @@ import kr.co.ouoe.DiyPost.entity.DiyPost;
 import kr.co.ouoe.MeetingPost.domain.MeetingLocate;
 import kr.co.ouoe.MeetingPost.domain.MeetingPost;
 import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
+import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
 import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
 import kr.co.ouoe.MeetingPost.repository.MeetingLocateRepository;
@@ -67,6 +68,22 @@ public class MeetingPostService {
         return searchAllMeeting();
 
     }
+
+    //미팅 포스트 수정
+    public boolean modifyPost(MeetingPostModifyRequestDTO modifyRequestDTO){
+        MeetingPost meetingPost=meetingPostRepository.getOne(modifyRequestDTO.getMeetingPostId());
+        //1. 포스트 수정
+        meetingPost.setTitle(modifyRequestDTO.getTitle());
+        meetingPost.setContent(modifyRequestDTO.getContent());
+        meetingPost.setThumbNail(modifyRequestDTO.getThumbnailUrl());
+        //2 . 위치(경도,위도) 수정
+        MeetingLocate meetingLocate=meetingLocateRepository.getOne(meetingPost.getMeetingLocateId());
+        meetingLocate.setLantitude(modifyRequestDTO.getX());
+        meetingLocate.setLongitude(modifyRequestDTO.getY());
+
+        return true;
+    }
+
 
     //미팅 포스트 삭제
     public MeetingListResponseDTO delete(String useremail, Long boardNo) {
