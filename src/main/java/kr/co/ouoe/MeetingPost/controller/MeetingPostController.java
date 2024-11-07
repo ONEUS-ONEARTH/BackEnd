@@ -52,6 +52,18 @@ public class MeetingPostController {
 
     }
 
+    // 포스트 북마크 하기
+    @GetMapping("/bookmark")
+    public ResponseEntity<?> BookmarkOnPost(@AuthenticationPrincipal TokenUserInfo tokenUserInfo,@RequestParam long postId){
+        if(tokenUserInfo==null){
+            return ResponseEntity.badRequest().body("로그인한 사용자만 이용할수 있어요!");
+        }
+        boolean isbookmarked=meetingPostService.bookmark(tokenUserInfo.getEmail(),postId);
+
+
+        return ResponseEntity.ok().body(isbookmarked);
+    }
+
 
 
     //모임 포스트 작성하기

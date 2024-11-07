@@ -2,30 +2,35 @@ package kr.co.ouoe.User.entity;
 
 import jakarta.persistence.*;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
+import kr.co.ouoe.User.account.BookMarkCategory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "users")
+@Table(name = "bookmarks")
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookMark   {//UserDetails를 상속잗아 인증 객체로 사용
+@NoArgsConstructor
+public class BookMark   {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",updatable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_Id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diypost_id")
-    private DiyPost diyPost;
+    @Column(name = "category") //업사이클포스트인지 미팅 포스트인지 구분
+    private BookMarkCategory bookMarkCategory;
+
+    @Column(name = "post_id")
+    private Long postId;
+
+
+
 
 
 }

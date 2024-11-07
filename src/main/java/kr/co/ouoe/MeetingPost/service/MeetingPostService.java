@@ -13,7 +13,10 @@ import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
 import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
 import kr.co.ouoe.MeetingPost.repository.MeetingLocateRepository;
 import kr.co.ouoe.MeetingPost.repository.MeetingPostRepository;
+import kr.co.ouoe.User.account.BookMarkCategory;
+import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
+import kr.co.ouoe.User.repository.BookMarkRepository;
 import kr.co.ouoe.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,7 @@ public class MeetingPostService {
     private final MeetingPostRepository meetingPostRepository;
     private final UserRepository userRepository;
     private final MeetingLocateRepository meetingLocateRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     public MeetingListResponseDTO searchAllMeeting(){
         List<MeetingResponseDTO> postList=meetingPostRepository.findAllMeetingResponseDTO();
@@ -105,6 +109,20 @@ public class MeetingPostService {
             log.error("보드 삭제 중 오류 발생. 계정: {}, 보드 번호: {}",useremail, boardNo, e);
         }
         return searchAllMeeting();
+    }
+
+    //모임 북마크 기능
+    public Boolean bookmark(String useremail, Long postNo) {
+
+        User user=userRepository.findByEmail(useremail);
+        BookMark bookMark= new BookMark();
+        bookMark.setPostId(postNo);
+        bookMark.setBookMarkCategory(BookMarkCategory.MEETING);
+        bookMark.setUserId(user.getId());
+        bookMarkRepository.save(bookMark);
+
+        return true;
+
     }
 
 
