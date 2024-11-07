@@ -1,10 +1,7 @@
 package kr.co.ouoe.DiyPost.controller;
 
 
-import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
-import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
-import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
-import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
+import kr.co.ouoe.DiyPost.dto.*;
 import kr.co.ouoe.DiyPost.service.upcyclePostService;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
@@ -33,6 +32,15 @@ public class upcyclePostController {
         PostListResponseDTO allPost =upcyclePostService.searchAllPost();
         return ResponseEntity.ok().body(allPost);
 
+
+    }
+    //보드 페이징 처리 목록 조회 요청
+    @GetMapping("/pageNo/{pageNo}")
+    public ResponseEntity<?> searchPostListBypageNo(@PathVariable int pageNo){
+        List<PostResponseDTO> postResponseDTOList=upcyclePostService.searchPostListWithPage(pageNo-1);
+        int allPageNo=upcyclePostService.getAllPageNo(pageNo-1);
+        PagePostResponseDTO postListResponseDTO= PagePostResponseDTO.builder().list(postResponseDTOList).allPageNo(allPageNo).build();
+        return ResponseEntity.ok().body(postListResponseDTO);
 
     }
 
