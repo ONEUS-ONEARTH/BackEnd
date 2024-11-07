@@ -39,7 +39,8 @@ public class SecurityConfig {
                 .authorizeRequests( auth->auth
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/user/**"),
-                                new AntPathRequestMatcher("/api/upcycle/posts")
+                                new AntPathRequestMatcher("/api/upcycle/posts"),
+                                new AntPathRequestMatcher("/api/upcycle/posts/**")
                         ).permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout
