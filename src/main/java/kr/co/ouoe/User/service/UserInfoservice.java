@@ -1,6 +1,9 @@
 package kr.co.ouoe.User.service;
 
 
+import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
+import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
+import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
 import kr.co.ouoe.User.dto.ModifyUserRequestDTO;
 import kr.co.ouoe.User.dto.TokenUserInfo;
 import kr.co.ouoe.User.entity.User;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ import java.nio.file.Path;
 public class UserInfoservice {
 
     private final UserRepository userRepository;
+    private final DiyPostRepository diyPostRepository;
     private final UserService userService;
 
     private static final String FILEROOTPATH="D:\\Study\\OneusOnearth_BackEnd\\src\\main\\resources\\static\\images";
@@ -59,6 +64,21 @@ public class UserInfoservice {
         return true;
 
 
+
+    }
+
+
+    //내 포스트 정보를 불러옵니다.
+    public PostListResponseDTO getMyPost(User user){
+
+        //유저  Id
+        long userId=user.getId();
+        //포스트 불러오기
+        List<PostResponseDTO> postResponseDTOList=diyPostRepository.findAllByuserId(userId);
+        PostListResponseDTO postListResponseDTO=PostListResponseDTO.builder()
+                .boards(postResponseDTOList)
+                .build();
+        return postListResponseDTO;
 
     }
 }

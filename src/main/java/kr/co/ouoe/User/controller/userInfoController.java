@@ -1,5 +1,6 @@
 package kr.co.ouoe.User.controller;
 
+import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
 import kr.co.ouoe.User.account.UserAccount;
 import kr.co.ouoe.User.dto.LoginUserResponseDTO;
 import kr.co.ouoe.User.dto.ModifyUserRequestDTO;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+//내정보 페이지 관련 컨트롤러를 다룹니다.
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -47,6 +49,23 @@ public class userInfoController {
         log.info("loginUserResponseDTO: {}", loginUserResponseDTO);
         return ResponseEntity.ok().body(loginUserResponseDTO);
         //return null;
+    }
+
+
+    @GetMapping("/myupcyclePost")
+    public ResponseEntity<?> searchMyPostList(@AuthenticationPrincipal TokenUserInfo userAccount){
+        User user = userInfoservice.getUserInfo(userAccount.getEmail());
+        //유저 아이디 이용해서 포스트 전부 검색
+        log.info("user info : {}", user.getName());
+        PostListResponseDTO postListResponseDTO=userInfoservice.getMyPost(user);
+        return ResponseEntity.ok().body(postListResponseDTO);
+    }
+
+    // 유저가 찜한 미팅정보를 불러옵니다.
+    @GetMapping("/mybookmark")
+    public ResponseEntity<?> searchMyBookmarkList(@AuthenticationPrincipal TokenUserInfo userAccount){
+
+        return null;
     }
 
     //유저정보를 수정합니다.(비밀번호, 이메일 제외)
