@@ -18,6 +18,7 @@ import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.repository.BookMarkRepository;
 import kr.co.ouoe.User.repository.UserRepository;
+import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -167,6 +168,58 @@ public class MeetingPostService {
             return true;
 
 
+    }
+
+
+    //포스트 디테일 불러오기
+    public  MeetingResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo){
+
+        MeetingPost meetingPost=meetingPostRepository.getOne(id);
+        User user=userRepository.getOne(meetingPost.getUserId());
+        MeetingResponseDTO meetingResponseDTO;
+
+        if(tokenUserInfo==null){
+           // 토큰이 없으면 로그인한 사용자가 아님
+            meetingResponseDTO=new MeetingResponseDTO();
+            meetingResponseDTO.setId(meetingPost.getId());
+            meetingResponseDTO.setTitle(meetingPost.getTitle());
+            meetingResponseDTO.setContent(meetingPost.getContent());
+            meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
+            meetingResponseDTO.setEditable(false);
+            meetingResponseDTO.setAuthor(user.getNickname());
+            meetingResponseDTO.setUserId(user.getId());
+            meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
+            meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+
+        }
+        else{
+            if(tokenUserInfo.getEmail().equals(user.getEmail())){
+                meetingResponseDTO=new MeetingResponseDTO();
+                meetingResponseDTO.setId(meetingPost.getId());
+                meetingResponseDTO.setTitle(meetingPost.getTitle());
+                meetingResponseDTO.setContent(meetingPost.getContent());
+                meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
+                meetingResponseDTO.setEditable(true);
+                meetingResponseDTO.setAuthor(user.getNickname());
+                meetingResponseDTO.setUserId(user.getId());
+                meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
+                meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+
+            }else{
+                meetingResponseDTO=new MeetingResponseDTO();
+                meetingResponseDTO.setId(meetingPost.getId());
+                meetingResponseDTO.setTitle(meetingPost.getTitle());
+                meetingResponseDTO.setContent(meetingPost.getContent());
+                meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
+                meetingResponseDTO.setEditable(false);
+                meetingResponseDTO.setAuthor(user.getNickname());
+                meetingResponseDTO.setUserId(user.getId());
+                meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
+                meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+            }
+        }
+
+        return meetingResponseDTO;
     }
 
 

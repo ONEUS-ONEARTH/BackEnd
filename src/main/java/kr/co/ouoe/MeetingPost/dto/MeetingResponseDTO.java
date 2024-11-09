@@ -21,6 +21,7 @@ public class MeetingResponseDTO {
     private String thumbnailUrl;
     private String author;
     private  LocalDateTime createDate;
+    private boolean isEditable;
     private long userId;
     private long meetingId;
 
