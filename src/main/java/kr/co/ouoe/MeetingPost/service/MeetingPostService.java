@@ -20,9 +20,13 @@ import kr.co.ouoe.User.repository.BookMarkRepository;
 import kr.co.ouoe.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +52,25 @@ public class MeetingPostService {
                 .boards(postList)
                 .build();
 
+    }
+
+    // 페이징 처리된 보드 불러오기
+    public  List<MeetingResponseDTO> searchPostListWithPage(int pageNo){
+        PageRequest pageRequest = PageRequest.of(pageNo, 10, Sort.by("postUpdateDateTime").descending());
+        Page<MeetingPost> result=meetingPostRepository.findAll(pageRequest);
+        int totalPage=result.getTotalPages();
+        List<MeetingResponseDTO> list = new ArrayList<>();
+        list.forEach(meetingPost -> {
+
+        });
+
+        return list;
+    }
+
+    public int getAllPageNo(int pageNo) {
+        PageRequest pageRequest = PageRequest.of(pageNo, 6, Sort.by("boardUpdateDateTime").descending());
+        Page<MeetingPost> result = meetingPostRepository.findAll(pageRequest); // 해당 페이지 리스트
+        return result.getTotalPages();
     }
 
 
@@ -115,13 +138,20 @@ public class MeetingPostService {
     public Boolean bookmark(String useremail, Long postNo) {
 
         User user=userRepository.findByEmail(useremail);
-        BookMark bookMark= new BookMark();
-        bookMark.setPostId(postNo);
-        bookMark.setBookMarkCategory(BookMarkCategory.MEETING);
-        bookMark.setUserId(user.getId());
-        bookMarkRepository.save(bookMark);
 
-        return true;
+        // 북마크가 이미 존재하는지 확인
+        boolean isExists=bookMarkRepository.existsBookMarkByUserIdAndAndPostId(user.getId(),postNo);
+
+        if(isExists){
+            return false;
+        }
+            BookMark bookMark= new BookMark();
+            bookMark.setPostId(postNo);
+            bookMark.setBookMarkCategory(BookMarkCategory.MEETING);
+            bookMark.setUserId(user.getId());
+            bookMarkRepository.save(bookMark);
+            return true;
+
 
     }
 

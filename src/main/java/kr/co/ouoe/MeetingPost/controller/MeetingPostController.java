@@ -1,13 +1,8 @@
 package kr.co.ouoe.MeetingPost.controller;
 
 
-import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
-import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
-import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
-import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
-import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
-import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
-import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
+import kr.co.ouoe.DiyPost.dto.*;
+import kr.co.ouoe.MeetingPost.dto.*;
 import kr.co.ouoe.MeetingPost.service.MeetingPostService;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
@@ -31,12 +28,24 @@ public class MeetingPostController {
     private MeetingPostService meetingPostService;
 
     // 모인 전체 불러오기
-    @GetMapping("/")
+    @GetMapping("/posts")
     public ResponseEntity<?> searchAllMeeting(){
         log.info("searchAllMeeting");
         MeetingListResponseDTO meetingResponseDTO= meetingPostService.searchAllMeeting();
         return ResponseEntity.ok().body(meetingResponseDTO);
     }
+
+    // 모임 페이징 처리
+    @GetMapping("/pageNo/{pageNo}")
+    public ResponseEntity<?> searchMeetingPostListBypageNo(@PathVariable int pageNo){
+        List<MeetingResponseDTO> postResponseDTOList=meetingPostService.searchPostListWithPage(pageNo-1);
+        int allPageNo=meetingPostService.getAllPageNo(pageNo-1);
+        PageMeetingPostResponseDTO postListResponseDTO= PageMeetingPostResponseDTO.builder().list(postResponseDTOList).allPageNo(allPageNo).build();
+        return ResponseEntity.ok().body(postListResponseDTO);
+
+    }
+
+
 
     //모임 지역별로 불러오기
     //si-> 시
@@ -85,7 +94,6 @@ public class MeetingPostController {
     }
 
     //모임 포스트 수정하기
-
     @RequestMapping(method = {PUT,PATCH},path = "/modify")
     public ResponseEntity<?> UpdatePost(@RequestBody MeetingPostModifyRequestDTO modifyRequestDTO){
 
