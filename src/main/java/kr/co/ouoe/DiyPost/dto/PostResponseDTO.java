@@ -23,6 +23,7 @@ public class PostResponseDTO {
     private String tag;
     private long userId;
     private LocalDateTime createdDate;
+    private boolean isEditable;
 
     public PostResponseDTO(DiyPost diyPost) {
         this.id = diyPost.getId();

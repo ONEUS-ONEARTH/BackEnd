@@ -14,6 +14,7 @@ import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.exception.DuplicateEmailException;
 import kr.co.ouoe.User.repository.UserRepository;
+import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -52,18 +53,49 @@ public class upcyclePostService {
 
     }
 
-    public  PostResponseDTO searchPostById(Long id){
+    public  PostResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo){
 
         DiyPost diyPost=diyPostRepository.getOne(id);
         User user=userRepository.getOne(diyPost.getUserId());
-        PostResponseDTO postResponseDTO=PostResponseDTO.builder()
-                .id(diyPost.getId())
-                .title(diyPost.getTitle())
-                .content(diyPost.getContent())
-                .createdDate(diyPost.getCreatedAt())
-                .author(user.getNickname())
-                .tag(diyPost.getTag())
-                .build();
+        PostResponseDTO postResponseDTO;
+
+        if(tokenUserInfo==null){
+            postResponseDTO=PostResponseDTO.builder()
+                    .id(diyPost.getId())
+                    .title(diyPost.getTitle())
+                    .content(diyPost.getContent())
+                    .createdDate(diyPost.getCreatedAt())
+                    .author(user.getNickname())
+                    .tag(diyPost.getTag())
+                    .isEditable(false)
+                    .build();
+
+        }
+        else{
+            if(tokenUserInfo.getEmail().equals(user.getEmail())){
+                postResponseDTO=PostResponseDTO.builder()
+                        .id(diyPost.getId())
+                        .title(diyPost.getTitle())
+                        .content(diyPost.getContent())
+                        .createdDate(diyPost.getCreatedAt())
+                        .author(user.getNickname())
+                        .tag(diyPost.getTag())
+                        .isEditable(true)
+                        .build();
+
+            }else{
+                postResponseDTO=PostResponseDTO.builder()
+                        .id(diyPost.getId())
+                        .title(diyPost.getTitle())
+                        .content(diyPost.getContent())
+                        .createdDate(diyPost.getCreatedAt())
+                        .author(user.getNickname())
+                        .tag(diyPost.getTag())
+                        .isEditable(false)
+                        .build();
+            }
+        }
+
         return postResponseDTO;
     }
 

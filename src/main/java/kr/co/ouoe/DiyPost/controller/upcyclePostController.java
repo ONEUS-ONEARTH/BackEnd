@@ -52,7 +52,7 @@ public class upcyclePostController {
                     .badRequest()
                     .body(PostListResponseDTO.builder().error("postId는 공백 일 수 없습니다!").build());
         }try{
-            PostResponseDTO postResponseDTO=upcyclePostService.searchPostById(postId);
+            PostResponseDTO postResponseDTO=upcyclePostService.searchPostById(postId,tokenUserInfo);
             return ResponseEntity.ok().body(postResponseDTO);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
