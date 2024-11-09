@@ -6,13 +6,11 @@ import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
-import kr.co.ouoe.DiyPost.entity.Like;
+import kr.co.ouoe.DiyPost.entity.LikeScore;
 import kr.co.ouoe.DiyPost.repository.DiyMeterialRepository;
 import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
-import kr.co.ouoe.DiyPost.repository.LikeRepository;
-import kr.co.ouoe.User.entity.BookMark;
+import kr.co.ouoe.DiyPost.repository.LikeScoreRepository;
 import kr.co.ouoe.User.entity.User;
-import kr.co.ouoe.User.exception.DuplicateEmailException;
 import kr.co.ouoe.User.repository.UserRepository;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,23 +32,52 @@ public class upcyclePostService {
     private final DiyPostRepository diyPostRepository;
     private final UserRepository userRepository;
     private final DiyMeterialRepository diyMeterialRepository;
-    private  final LikeRepository likeRepository;
+    private  final LikeScoreRepository likeScoreRepository;
 
     //게시물 불러오기
     public  PostListResponseDTO searchAllPost(){
         List<PostResponseDTO> postList=diyPostRepository.findAllPostResponseDTO();
         
         //닉네임 찾아서 넣어주기
+
         for(PostResponseDTO post:postList){
             String nickname=userRepository.findById(post.getUserId()).get().getNickname();
             post.setAuthor(nickname);
         }
+
+
+
         
         return PostListResponseDTO.builder()
                 .boards(postList)
                 .build();
 
     }
+    public  PostListResponseDTO searchAllPostWithToken(TokenUserInfo tokenUserInfo){
+        List<PostResponseDTO> postList=diyPostRepository.findAllPostResponseDTO();
+
+        //닉네임 찾아서 넣어주기
+
+        User user=userRepository.findByEmail(tokenUserInfo.getEmail());
+        for(PostResponseDTO post:postList){
+            String nickname=userRepository.findById(post.getUserId()).get().getNickname();
+            post.setAuthor(nickname);
+            boolean isClicked= likeScoreRepository.existsLikeScoreByPostIdAndUserId(post.getId(), user.getId());
+            post.setCilcked(isClicked);
+        }
+        //계정이 있으면 따봉 여부 확인해서 보내주기
+
+
+
+        return PostListResponseDTO.builder()
+                .boards(postList)
+                .build();
+
+    }
+
+
+
+
 
     public  PostResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo){
 
@@ -187,20 +213,24 @@ public class upcyclePostService {
         //User 데려오기
         User user=userRepository.findByEmail(email);
         int likeSocre=diyPost.getLikeScore();
-        boolean isExists= likeRepository.existsLikeByPostIdAndUserId(postId,user.getId());
+        boolean isExists= likeScoreRepository.existsLikeScoreByPostIdAndUserId(postId,user.getId());
         //  Like 에서 posiId,와 UserId 조회 가져오기-> 이전에 유저가 굿을 누른적이 있는지 가져오기
         if(isExists){
-            throw new DuplicateEmailException("이미 좋아요를 눌렀어요!");
+            //존재하면 -1로 감소
+            diyPost.setLikeScore(likeSocre-1);
+            LikeScore likeScore = likeScoreRepository.findLikeScoreByPostIdAndUserId(postId,user.getId());
+            likeScoreRepository.delete(likeScore);
+
 
         }else{
             //존재하지 않으면 1 업데이드
             diyPost.setLikeScore(likeSocre+1);
 
             // 굿 표시한사람 저장.
-            Like like=new Like();
-            like.setPostId(postId);
-            like.setUserId(user.getId());
-            likeRepository.save(like);
+            LikeScore likeScore =new LikeScore();
+            likeScore.setPostId(postId);
+            likeScore.setUserId(user.getId());
+            likeScoreRepository.save(likeScore);
 
         }
 

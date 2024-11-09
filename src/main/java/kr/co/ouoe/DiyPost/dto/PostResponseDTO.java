@@ -24,6 +24,7 @@ public class PostResponseDTO {
     private long userId;
     private LocalDateTime createdDate;
     private boolean isEditable;
+    private boolean isCilcked;
     private int likeScore;
 
     public PostResponseDTO(DiyPost diyPost) {

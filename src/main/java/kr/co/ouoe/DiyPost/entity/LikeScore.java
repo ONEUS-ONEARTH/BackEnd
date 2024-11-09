@@ -2,15 +2,14 @@ package kr.co.ouoe.DiyPost.entity;
 
 
 import jakarta.persistence.*;
-import kr.co.ouoe.User.entity.User;
 import lombok.*;
 
-@Table(name = "like")
+@Table(name = "like_score")
 @Getter
 @Setter
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Like {
+public class LikeScore {
     // 라이트 없어도 될듯
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)

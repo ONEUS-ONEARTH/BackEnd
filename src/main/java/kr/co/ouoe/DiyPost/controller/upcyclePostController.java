@@ -30,8 +30,13 @@ public class upcyclePostController {
 
     //업싸이클 게시물을 불러오는 로직
     @GetMapping("/posts")
-    public ResponseEntity<?> postResponseDTOList (){
-        PostListResponseDTO allPost =upcyclePostService.searchAllPost();
+    public ResponseEntity<?> postResponseDTOList (@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
+        PostListResponseDTO allPost;
+        if(tokenUserInfo==null){
+             allPost =upcyclePostService.searchAllPost();
+        }else{
+             allPost =upcyclePostService.searchAllPostWithToken(tokenUserInfo);
+        }
         return ResponseEntity.ok().body(allPost);
 
 
@@ -79,6 +84,7 @@ public class upcyclePostController {
 
         return ResponseEntity.ok().body(postListResponseDTO);
     }
+    //
 
 
     //업사이클 게시물을 올리는 로직
