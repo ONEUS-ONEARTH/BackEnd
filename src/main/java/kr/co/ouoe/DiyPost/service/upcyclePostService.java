@@ -92,6 +92,7 @@ public class upcyclePostService {
                     .content(diyPost.getContent())
                     .createdDate(diyPost.getCreatedAt())
                     .author(user.getNickname())
+                    .likeScore(diyPost.getLikeScore())
                     .tag(diyPost.getTag())
                     .isEditable(false)
                     .build();
@@ -104,6 +105,7 @@ public class upcyclePostService {
                         .title(diyPost.getTitle())
                         .content(diyPost.getContent())
                         .createdDate(diyPost.getCreatedAt())
+                        .likeScore(diyPost.getLikeScore())
                         .author(user.getNickname())
                         .tag(diyPost.getTag())
                         .isEditable(true)
@@ -114,6 +116,7 @@ public class upcyclePostService {
                         .id(diyPost.getId())
                         .title(diyPost.getTitle())
                         .content(diyPost.getContent())
+                        .likeScore(diyPost.getLikeScore())
                         .createdDate(diyPost.getCreatedAt())
                         .author(user.getNickname())
                         .tag(diyPost.getTag())
