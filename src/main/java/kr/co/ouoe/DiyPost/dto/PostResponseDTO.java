@@ -24,6 +24,7 @@ public class PostResponseDTO {
     private long userId;
     private LocalDateTime createdDate;
     private boolean isEditable;
+    private int likeScore;
 
     public PostResponseDTO(DiyPost diyPost) {
         this.id = diyPost.getId();
@@ -31,6 +32,7 @@ public class PostResponseDTO {
         this.tag= diyPost.getTag();
         this.content = diyPost.getContent();
         this.userId = diyPost.getUserId();
+        this.likeScore=diyPost.getLikeScore();
         //this.author=diyPost.getUser().getNickname();
         this.createdDate = diyPost.getCreatedAt();
     }
