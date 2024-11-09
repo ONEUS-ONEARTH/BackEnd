@@ -1,10 +1,9 @@
 package kr.co.ouoe.User.controller;
 
+import kr.co.ouoe.User.dto.*;
+import kr.co.ouoe.User.exception.IncorrectPasswordException;
+import kr.co.ouoe.User.exception.NoLoginArgumentsException;
 import kr.co.ouoe.common.BaseException;
-import kr.co.ouoe.User.dto.AddUserRequest;
-import kr.co.ouoe.User.dto.EmailCheckRequest;
-import kr.co.ouoe.User.dto.PhoneCheckRequest;
-import kr.co.ouoe.User.dto.UserLoginRequestDto;
 import kr.co.ouoe.User.exception.DuplicateEmailException;
 import kr.co.ouoe.User.exception.NoDuplicateCheckArgumentException;
 import kr.co.ouoe.User.service.UserService;
@@ -53,8 +52,13 @@ public class userController {
         String email= loginRequestDto.getEmail();
         String password= loginRequestDto.getPassword();
 
+        try{
+            LoginUserResponseDTO loginUserResponseDTO=userService.login(email,password);
+            return ResponseEntity.ok().body(loginUserResponseDTO);
+        }catch (NoLoginArgumentsException| IncorrectPasswordException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        return ResponseEntity.ok().body(userService.login(email,password));
 
     }
 
