@@ -133,7 +133,7 @@ public class MeetingPostService {
             //유저 찾기
             User user=userRepository.findByEmail(useremail);
             // 보드를 찾기
-            MeetingPost post = meetingPostRepository.findByIdAndUserId(user.getId(),boardNo);
+            MeetingPost post = meetingPostRepository.findByIdAndUserId(boardNo,user.getId());
             if (post == null) {
                 log.warn("삭제할 보드를 찾을 수 없습니다. 계정: {}, 보드 번호: {}", useremail, boardNo);
                 return null;
