@@ -1,6 +1,7 @@
 package kr.co.ouoe.DiyPost.controller;
 
 
+import jakarta.transaction.Transactional;
 import kr.co.ouoe.DiyPost.dto.*;
 import kr.co.ouoe.DiyPost.service.upcyclePostService;
 import kr.co.ouoe.Util.TokenUserInfo;
@@ -19,6 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 @RestController
 @RequestMapping("/api/upcycle")
 public class upcyclePostController {
@@ -101,6 +103,7 @@ public class upcyclePostController {
     //포스트 수정 요청
     @RequestMapping(method = {PUT,PATCH},path = "/modify")
     public ResponseEntity<?> UpdatePost(@RequestBody PostModifyRequestDTO postModifyRequestDTO){
+        log.info(postModifyRequestDTO.toString());
 
         try{
             boolean isupdate=upcyclePostService.modifyPost(postModifyRequestDTO);
