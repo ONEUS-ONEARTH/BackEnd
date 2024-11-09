@@ -54,6 +54,8 @@ public class MeetingPostService {
 
     }
 
+
+
     // 페이징 처리된 보드 불러오기
     public  List<MeetingResponseDTO> searchPostListWithPage(int pageNo){
         PageRequest pageRequest = PageRequest.of(pageNo, 10, Sort.by("postUpdateDateTime").descending());
@@ -61,6 +63,18 @@ public class MeetingPostService {
         int totalPage=result.getTotalPages();
         List<MeetingResponseDTO> list = new ArrayList<>();
         list.forEach(meetingPost -> {
+            MeetingResponseDTO meetingResponseDTO=new MeetingResponseDTO();
+            meetingResponseDTO.setId(meetingPost.getId());
+            meetingResponseDTO.setTitle(meetingPost.getTitle());
+            meetingResponseDTO.setContent(meetingPost.getContent());
+            meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbnailUrl());
+            meetingResponseDTO.setAuthor(meetingPost.getAuthor());
+            meetingResponseDTO.setCreateDate(meetingPost.getCreateDate());
+            meetingResponseDTO.setUserId(meetingPost.getUserId());
+            meetingResponseDTO.setMeetingId(meetingPost.getMeetingId());
+            list.add(meetingResponseDTO);
+
+
 
         });
 
@@ -68,7 +82,7 @@ public class MeetingPostService {
     }
 
     public int getAllPageNo(int pageNo) {
-        PageRequest pageRequest = PageRequest.of(pageNo, 6, Sort.by("boardUpdateDateTime").descending());
+        PageRequest pageRequest = PageRequest.of(pageNo, 6, Sort.by("postUpdateDateTime").descending());
         Page<MeetingPost> result = meetingPostRepository.findAll(pageRequest); // 해당 페이지 리스트
         return result.getTotalPages();
     }
