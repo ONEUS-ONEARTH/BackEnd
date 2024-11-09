@@ -17,12 +17,13 @@ public class Like {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "like_score")
-    private int likeScore;
+    @Column(name = "post_id")
+    private long postId;
 
-    public Like(){
-        this.likeScore = 0;
-    }
+    @Column(name = "user_id")
+    private long userId;
+
+
 
 
 

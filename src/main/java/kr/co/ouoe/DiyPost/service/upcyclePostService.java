@@ -12,6 +12,7 @@ import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
 import kr.co.ouoe.DiyPost.repository.LikeRepository;
 import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
+import kr.co.ouoe.User.exception.DuplicateEmailException;
 import kr.co.ouoe.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +70,7 @@ public class upcyclePostService {
 
     //페이징 처리된 보드 불러오기
     public List<PostResponseDTO> searchPostListWithPage(int pageNo){
-        PageRequest pageRequest=PageRequest.of(pageNo,6, Sort.by("postUpdateDateTime").descending());
+        PageRequest pageRequest=PageRequest.of(pageNo,20, Sort.by("postUpdateDateTime").descending());
         Page<DiyPost> result=diyPostRepository.findAll(pageRequest);
         int totalPage=result.getTotalPages();
         List<PostResponseDTO> list = new ArrayList<>();
@@ -148,11 +149,29 @@ public class upcyclePostService {
     }
 
     //포스트 좋아요 업데이트
-    public PostListResponseDTO updateLikeScore(long postId){
-
+    public PostListResponseDTO updateLikeScore(long postId,String email){
+        // 포스트 가져오기
         DiyPost diyPost=diyPostRepository.getOne(postId);
+        //User 데려오기
+        User user=userRepository.findByEmail(email);
         int likeSocre=diyPost.getLikeScore();
-        diyPost.setLikeScore(likeSocre+1);
+        boolean isExists= likeRepository.existsLikeByPostIdAndUserId(postId,user.getId());
+        //  Like 에서 posiId,와 UserId 조회 가져오기-> 이전에 유저가 굿을 누른적이 있는지 가져오기
+        if(isExists){
+            throw new DuplicateEmailException("이미 좋아요를 눌렀어요!");
+
+        }else{
+            //존재하지 않으면 1 업데이드
+            diyPost.setLikeScore(likeSocre+1);
+
+            // 굿 표시한사람 저장.
+            Like like=new Like();
+            like.setPostId(postId);
+            like.setUserId(user.getId());
+            likeRepository.save(like);
+
+        }
+
 
         return searchAllPost();
     }

@@ -46,7 +46,7 @@ public class upcyclePostController {
 
     //업싸이클 디테일 보여주는 로직
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<?> showPostDeatil (@PathVariable Long postId){
+    public ResponseEntity<?> showPostDeatil (@PathVariable Long postId,@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
         if (postId == null || postId.equals("")){
             return ResponseEntity
                     .badRequest()
@@ -63,7 +63,7 @@ public class upcyclePostController {
 
 
     // 업사이클 스코어 올리는 로직
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/posts/score/{postId}")
     public ResponseEntity<?> updateLikeScore (@PathVariable Long postId,@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
         if (postId == null || postId.equals("")){
             return ResponseEntity
@@ -73,9 +73,9 @@ public class upcyclePostController {
         if(tokenUserInfo==null){
             return ResponseEntity.badRequest().body("로그인 후 이용하실수 있어요!");
         }
-        upcyclePostService.updateLikeScore(postId);
+        PostListResponseDTO postListResponseDTO = upcyclePostService.updateLikeScore(postId, tokenUserInfo.getEmail());
 
-        return null;
+        return ResponseEntity.ok().body(postListResponseDTO);
     }
 
 
