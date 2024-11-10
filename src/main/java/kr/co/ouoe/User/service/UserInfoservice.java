@@ -75,6 +75,9 @@ public class UserInfoservice {
         long userId=user.getId();
         //포스트 불러오기
         List<PostResponseDTO> postResponseDTOList=diyPostRepository.findAllByuserId(userId);
+        for(PostResponseDTO postResponseDTO:postResponseDTOList){
+            postResponseDTO.setAuthor(user.getNickname());
+        }
         PostListResponseDTO postListResponseDTO=PostListResponseDTO.builder()
                 .boards(postResponseDTOList)
                 .build();
