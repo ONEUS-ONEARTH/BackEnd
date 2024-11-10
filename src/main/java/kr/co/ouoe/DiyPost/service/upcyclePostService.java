@@ -94,12 +94,15 @@ public class upcyclePostService {
                     .author(user.getNickname())
                     .likeScore(diyPost.getLikeScore())
                     .tag(diyPost.getTag())
+                    .isCilcked(false)
                     .isEditable(false)
                     .build();
 
         }
         else{
+            boolean isClicked= likeScoreRepository.existsLikeScoreByPostIdAndUserId(diyPost.getId(), user.getId());
             if(tokenUserInfo.getEmail().equals(user.getEmail())){
+
                 postResponseDTO=PostResponseDTO.builder()
                         .id(diyPost.getId())
                         .title(diyPost.getTitle())
@@ -107,6 +110,7 @@ public class upcyclePostService {
                         .createdDate(diyPost.getCreatedAt())
                         .likeScore(diyPost.getLikeScore())
                         .author(user.getNickname())
+                        .isCilcked(isClicked)
                         .tag(diyPost.getTag())
                         .isEditable(true)
                         .build();
@@ -120,6 +124,7 @@ public class upcyclePostService {
                         .createdDate(diyPost.getCreatedAt())
                         .author(user.getNickname())
                         .tag(diyPost.getTag())
+                        .isCilcked(isClicked)
                         .isEditable(false)
                         .build();
             }
