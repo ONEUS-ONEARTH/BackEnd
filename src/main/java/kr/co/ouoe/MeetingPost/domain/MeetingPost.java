@@ -1,7 +1,6 @@
 package kr.co.ouoe.MeetingPost.domain;
 
 import jakarta.persistence.*;
-import kr.co.ouoe.User.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,6 +23,7 @@ public class MeetingPost  {
     private  String title;
 
     @Column(name = "content",nullable = false)
+    @Lob
     private  String content;
 
     @Column(name = "thumb_nail")
@@ -44,13 +44,19 @@ public class MeetingPost  {
    private Long meetingLocateId;
 
 
+   @Column
+   @Enumerated(EnumType.STRING)
+   private Option option;
+
+
     @Builder
-    public MeetingPost(String title, String content,LocalDateTime createdAt, String ThumbNail,long userId) {
+    public MeetingPost(String title, String content,LocalDateTime createdAt, String ThumbNail,long userId,Option option) {
         this.title = title;
         this.content = content;
         this.ThumbNail = ThumbNail;
         this.createdAt = createdAt;
         this.userId=  userId;
+        this.option = option;
     }
 
 

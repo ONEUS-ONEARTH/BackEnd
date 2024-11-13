@@ -7,6 +7,7 @@ import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
 import kr.co.ouoe.MeetingPost.domain.MeetingLocate;
 import kr.co.ouoe.MeetingPost.domain.MeetingPost;
+import kr.co.ouoe.MeetingPost.domain.Option;
 import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
@@ -100,7 +101,9 @@ public class MeetingPostService {
 
         //1.MeetingPost저장 저장,태그까지 저장
         LocalDateTime createDateTime=LocalDateTime.now();
-        MeetingPost newMeetingPost= new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(),createDateTime, meetingPostRequest.getThumbnailUrl(),user.getId());
+
+        MeetingPost newMeetingPost= new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(),createDateTime, meetingPostRequest.getThumbnailUrl(),user.getId(),
+                meetingPostRequest.getOption().equals("개인")? Option.개인:Option.회사);
         long meetingPostId= meetingPostRepository.save(newMeetingPost).getId();
         //2. Meeting Locate 저장
         MeetingLocate newMeetingLocate=MeetingLocate.builder().lantitude(meetingPostRequest.getX()).longitude(meetingPostRequest.getY()).build();

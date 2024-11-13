@@ -24,6 +24,7 @@ public class MeetingResponseDTO {
     private boolean isEditable;
     private long userId;
     private long meetingId;
+    private String option; //개인인지 회사인지
 
     public MeetingResponseDTO(MeetingPost meetingPost) {
         this.id = meetingPost.getId();
