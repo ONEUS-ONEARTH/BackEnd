@@ -1,5 +1,6 @@
 package kr.co.ouoe.User.controller;
 
+import jakarta.transaction.Transactional;
 import kr.co.ouoe.User.dto.*;
 import kr.co.ouoe.User.exception.IncorrectPasswordException;
 import kr.co.ouoe.User.exception.NoLoginArgumentsException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@Transactional
 @RequestMapping("/api/user")
 @CrossOrigin(origins = {"http://localhost:3000"}, allowCredentials = "true")
 public class userController {
