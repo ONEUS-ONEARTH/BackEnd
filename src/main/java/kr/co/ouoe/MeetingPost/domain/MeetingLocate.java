@@ -18,10 +18,10 @@ public class MeetingLocate {
     //private Long meetingPostId;
 
     @Column(name = "lantitude",nullable = false)
-    private Long x;
+    private double x;
 
     @Column(name = "longitude",nullable = false)
-    private Long y;
+    private double y;
 
 
     @Builder
