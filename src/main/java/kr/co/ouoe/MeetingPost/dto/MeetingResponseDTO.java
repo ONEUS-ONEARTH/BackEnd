@@ -1,6 +1,6 @@
 package kr.co.ouoe.MeetingPost.dto;
 
-import kr.co.ouoe.DiyPost.entity.DiyPost;
+
 import kr.co.ouoe.MeetingPost.domain.MeetingPost;
 import lombok.*;
 
@@ -22,8 +22,8 @@ public class MeetingResponseDTO {
     private String author;
     private  LocalDateTime createDate;
     private boolean isEditable;
-    private long userId;
-    private long meetingId;
+    private double userId;
+    private double meetingId;
     private String option; //개인인지 회사인지
 
     public MeetingResponseDTO(MeetingPost meetingPost) {
