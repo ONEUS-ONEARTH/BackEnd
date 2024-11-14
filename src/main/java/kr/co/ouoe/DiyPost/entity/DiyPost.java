@@ -28,6 +28,7 @@ public class DiyPost {
     private String title;
 
     @Column(name = "content", nullable = false)
+    @Lob
     private String content;
 
     @Column(name = "thumbnailurl")
