@@ -13,7 +13,7 @@ import java.util.List;
 @Entity(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User implements UserDetails  {//UserDetails를 상속잗아 인증 객체로 사용
 
     @Id
