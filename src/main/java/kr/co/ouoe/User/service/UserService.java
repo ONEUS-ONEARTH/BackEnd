@@ -2,6 +2,7 @@ package kr.co.ouoe.User.service;
 
 
 import kr.co.ouoe.Util.FileUtil;
+import kr.co.ouoe.Util.S3Uploader;
 import kr.co.ouoe.Util.TokenProvider;
 import kr.co.ouoe.common.BaseException;
 import kr.co.ouoe.common.jwt.JwtTokenProvider;
@@ -15,6 +16,7 @@ import kr.co.ouoe.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,10 +46,14 @@ public class UserService {
     private final UserRepository userRepository;
     private  final BCryptPasswordEncoder bCryptPasswordEncoder;//-> 순환참조의 원인 근데 이게 없으면 어떻게..?
     private final TokenProvider tokenProvider;
-    public UserService(UserRepository userRepository, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider tokenProvider /* other dependencies */) {
+    @Autowired
+    private final S3Uploader s3Uploader;
+
+    public UserService(UserRepository userRepository, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder, TokenProvider tokenProvider, S3Uploader s3Uploader /* other dependencies */) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenProvider = tokenProvider;
+        this.s3Uploader = s3Uploader;
     }
 
 
@@ -65,9 +71,11 @@ public class UserService {
         if(isVaild){
             try{
                 log.info(FILEROOTPATH);
-                Path localuploadpath= FileUtil.upload(addUserRequestDTO.getImageFile(),FILEROOTPATH);
-                log.info("localuploadpath:{}",localuploadpath);
-                FileUtil.fileUpload(addUserRequestDTO.getImageFile(),localuploadpath);
+                //로컬에서 실행할시 주석을 풀어주세요
+//                Path localuploadpath= FileUtil.upload(addUserRequestDTO.getImageFile(),FILEROOTPATH);
+//                log.info("localuploadpath:{}",localuploadpath);
+//                FileUtil.fileUpload(addUserRequestDTO.getImageFile(),localuploadpath);
+                String localuploadpath= s3Uploader.uploadFileToS3(addUserRequestDTO.getImageFile());
                User save = userRepository.save(addUserRequestDTO.toEntity(bCryptPasswordEncoder,localuploadpath.toString()));
                 log.info("회원가입 성공, 이미지 저장 버전");
                 return true;
