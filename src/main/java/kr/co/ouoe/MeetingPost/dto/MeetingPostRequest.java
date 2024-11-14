@@ -1,6 +1,7 @@
 package kr.co.ouoe.MeetingPost.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Setter
 @Getter

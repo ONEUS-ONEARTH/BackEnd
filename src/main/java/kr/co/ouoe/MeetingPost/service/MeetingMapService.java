@@ -25,8 +25,8 @@ public class MeetingMapService {
         List<MapResponseDTO> locates = new ArrayList<>();
         log.info("searchAllplace");
         for (MeetingLocate meetingLocate : locateRepository.findAll()) {
-            MapResponseDTO mapres=MapResponseDTO.builder().x(meetingLocate.getLantitude()).y(meetingLocate.getLongitude()).build();
-            locates.add(mapres);
+            //MapResponseDTO mapres=MapResponseDTO.builder().x(meetingLocate.getLantitude()).y(meetingLocate.getLongitude()).build();
+            //locates.add(mapres);
         }
         //MapListResponseDTO.builder().maps(locates).build();
         return MapListResponseDTO.builder().maps(locates).build();

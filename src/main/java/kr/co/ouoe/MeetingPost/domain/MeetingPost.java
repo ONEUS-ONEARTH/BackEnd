@@ -40,8 +40,10 @@ public class MeetingPost  {
    @Column(name = "user_id",nullable = false)
    private Long userId;
 
-   @Column(name = "meeting_locate_id",nullable = false)
-   private Long meetingLocateId;
+   @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+   @JoinColumn(name = "meeting_locate_id", referencedColumnName = "id")
+   private MeetingLocate meetingLocate;
+
 
 
    @Column
@@ -50,13 +52,14 @@ public class MeetingPost  {
 
 
     @Builder
-    public MeetingPost(String title, String content,LocalDateTime createdAt, String ThumbNail,long userId,Option option) {
+    public MeetingPost(String title, String content,LocalDateTime createdAt, String ThumbNail,long userId,Option option,MeetingLocate meetingLocate) {
         this.title = title;
         this.content = content;
         this.ThumbNail = ThumbNail;
         this.createdAt = createdAt;
         this.userId=  userId;
         this.option = option;
+        this.meetingLocate = meetingLocate;
     }
 
 

@@ -98,18 +98,18 @@ public class MeetingPostService {
         if(user==null){
             return null;
         }
+        ;
 
         //1.MeetingPost저장 저장,태그까지 저장
         LocalDateTime createDateTime=LocalDateTime.now();
+        MeetingLocate meetingLocate=MeetingLocate.builder().x(meetingPostRequest.getX()).y(meetingPostRequest.getY()).build();
 
         MeetingPost newMeetingPost= new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(),createDateTime, meetingPostRequest.getThumbnailUrl(),user.getId(),
-                meetingPostRequest.getOption().equals("개인")? Option.개인:Option.회사);
-        long meetingPostId= meetingPostRepository.save(newMeetingPost).getId();
-        //2. Meeting Locate 저장
-        MeetingLocate newMeetingLocate=MeetingLocate.builder().lantitude(meetingPostRequest.getX()).longitude(meetingPostRequest.getY()).build();
-        long meetingLocateId=meetingPostRepository.save(newMeetingPost).getId();
-        // 3. Meeting Locate 아이디 MetingPost에 저장
-        meetingPostRepository.findById(meetingPostId).get().setMeetingLocateId(meetingLocateId);
+                meetingPostRequest.getOption().equals("개인")? Option.개인:Option.회사,meetingLocate);
+        meetingPostRepository.save(newMeetingPost);
+       // long meetingPostId= meetingPostRepository.save(newMeetingPost).getId();
+
+
         return searchAllMeeting();
 
     }
@@ -122,9 +122,9 @@ public class MeetingPostService {
         meetingPost.setContent(modifyRequestDTO.getContent());
         meetingPost.setThumbNail(modifyRequestDTO.getThumbnailUrl());
         //2 . 위치(경도,위도) 수정
-        MeetingLocate meetingLocate=meetingLocateRepository.getOne(meetingPost.getMeetingLocateId());
-        meetingLocate.setLantitude(modifyRequestDTO.getX());
-        meetingLocate.setLongitude(modifyRequestDTO.getY());
+//        MeetingLocate meetingLocate=meetingLocateRepository.getOne(meetingPost.getMeetingLocateId());
+//        meetingLocate.setLantitude(modifyRequestDTO.getX());
+//        meetingLocate.setLongitude(modifyRequestDTO.getY());
 
         return true;
     }
@@ -192,7 +192,7 @@ public class MeetingPostService {
             meetingResponseDTO.setAuthor(user.getNickname());
             meetingResponseDTO.setUserId(user.getId());
             meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
-            meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+            //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
         }
         else{
@@ -206,7 +206,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setAuthor(user.getNickname());
                 meetingResponseDTO.setUserId(user.getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
-                meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+                //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
             }else{
                 meetingResponseDTO=new MeetingResponseDTO();
@@ -218,7 +218,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setAuthor(user.getNickname());
                 meetingResponseDTO.setUserId(user.getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
-                meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+               // meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
             }
         }
 
