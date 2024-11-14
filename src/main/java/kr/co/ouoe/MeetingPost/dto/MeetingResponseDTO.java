@@ -22,8 +22,8 @@ public class MeetingResponseDTO {
     private String author;
     private  LocalDateTime createDate;
     private boolean isEditable;
-    private double userId;
-    private double meetingId;
+    private long userId;
+    private long meetingId;
     private String option; //개인인지 회사인지
 
     public MeetingResponseDTO(MeetingPost meetingPost) {
@@ -32,6 +32,8 @@ public class MeetingResponseDTO {
         this.content = meetingPost.getContent();
         this.thumbnailUrl=meetingPost.getThumbNail();
         this.createDate=meetingPost.getCreatedAt();
+        this.userId=meetingPost.getUserId();
+        this.option=meetingPost.getOption().toString();
 
     }
 

@@ -1,6 +1,7 @@
 package kr.co.ouoe.MeetingPost.controller;
 
 
+import jakarta.transaction.Transactional;
 import kr.co.ouoe.DiyPost.dto.*;
 import kr.co.ouoe.MeetingPost.dto.*;
 import kr.co.ouoe.MeetingPost.service.MeetingPostService;
@@ -21,6 +22,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Transactional
 @RequestMapping("/api/meeting")
 public class MeetingPostController {
 
@@ -30,7 +32,7 @@ public class MeetingPostController {
     // 모인 전체 불러오기
     @GetMapping("/posts")
     public ResponseEntity<?> searchAllMeeting(){
-        log.info("searchAllMeeting");
+        log.info("searchAllMeeting, 들어옴??");
         MeetingListResponseDTO meetingResponseDTO= meetingPostService.searchAllMeeting();
         return ResponseEntity.ok().body(meetingResponseDTO);
     }
