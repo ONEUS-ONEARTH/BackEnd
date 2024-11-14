@@ -16,5 +16,6 @@ public class PostListResponseDTO {
 
     private String error;
     private List<PostResponseDTO> boards;
+    private int totalPost;
 
 }

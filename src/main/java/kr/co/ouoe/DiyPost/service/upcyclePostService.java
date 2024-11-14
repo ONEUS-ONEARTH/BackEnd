@@ -50,6 +50,7 @@ public class upcyclePostService {
         
         return PostListResponseDTO.builder()
                 .boards(postList)
+                .totalPost(postList.size())
                 .build();
 
     }
@@ -71,6 +72,7 @@ public class upcyclePostService {
 
         return PostListResponseDTO.builder()
                 .boards(postList)
+                .totalPost(postList.size())
                 .build();
 
     }
