@@ -5,6 +5,6 @@ import lombok.Builder;
 
 @Builder
 public class MapResponseDTO {
-    private long x;//위도
-    private long y; //경도
+    private Double x;//위도
+    private Double y; //경도
 }
