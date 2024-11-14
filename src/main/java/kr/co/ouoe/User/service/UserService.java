@@ -152,7 +152,7 @@ public class UserService {
 
     //user_id(emailX)로 유저찾기
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).get();
     }
 
     public User findByEmaild(String email) {
