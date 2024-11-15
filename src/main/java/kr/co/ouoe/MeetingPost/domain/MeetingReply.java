@@ -2,35 +2,34 @@ package kr.co.ouoe.MeetingPost.domain;
 
 import jakarta.persistence.*;
 import kr.co.ouoe.User.entity.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Table(name = "meeting_reply")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 public class MeetingReply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id",nullable = false)
     private Long id;
 
-    @Column(name = "reply_id")
-    private Long replyId;
-
     @Column(name = "content")
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_post_id")
-    private MeetingPost meetingPost;
+    @Column(name = "post_id")
+    private Long postId;
+
+    @Column(name = "createDate")
+    private LocalDateTime createDate;
 
 
 }
