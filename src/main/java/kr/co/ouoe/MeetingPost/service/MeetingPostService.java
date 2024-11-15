@@ -19,6 +19,7 @@ import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.repository.BookMarkRepository;
 import kr.co.ouoe.User.repository.UserRepository;
+import kr.co.ouoe.Util.S3Uploader;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class MeetingPostService {
     private final UserRepository userRepository;
     private final MeetingLocateRepository meetingLocateRepository;
     private final BookMarkRepository bookMarkRepository;
+    private final S3Uploader s3Uploader;
 
     public MeetingListResponseDTO searchAllMeeting() {
         List<MeetingResponseDTO> postList = meetingPostRepository.findAllMeetingResponseDTO();
@@ -92,7 +95,7 @@ public class MeetingPostService {
 
 
     //미팅포스트 작성
-    public MeetingListResponseDTO createMeeting(MeetingPostRequest meetingPostRequest, String email) {
+    public MeetingListResponseDTO createMeeting(MeetingPostRequest meetingPostRequest, String email) throws IOException {
 
         log.info(meetingPostRequest.getTitle());
         User user = userRepository.findByEmail(email);
@@ -104,9 +107,10 @@ public class MeetingPostService {
         //1.MeetingPost저장 저장,태그까지 저장
         LocalDateTime createDateTime = LocalDateTime.now();
         MeetingLocate meetingLocate = MeetingLocate.builder().x(meetingPostRequest.getX()).y(meetingPostRequest.getY()).build();
-
+       String url= s3Uploader.uploadFileToS3(meetingPostRequest.getThumnailImg());
         MeetingPost newMeetingPost = new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(), createDateTime, meetingPostRequest.getThumbnailUrl(), user.getId(),
                 meetingPostRequest.getOption().equals("개인") ? Option.개인 : Option.회사, meetingLocate);
+        newMeetingPost.setThumbNail(url);
         meetingPostRepository.save(newMeetingPost);
         // long meetingPostId= meetingPostRepository.save(newMeetingPost).getId();
 
