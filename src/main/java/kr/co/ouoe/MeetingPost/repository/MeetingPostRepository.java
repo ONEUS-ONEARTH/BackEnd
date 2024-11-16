@@ -17,4 +17,8 @@ public interface MeetingPostRepository extends JpaRepository<MeetingPost,Long> {
     MeetingPost findByIdAndUserId(Long postId, Long userId);
 
 
+    @Query("Select new kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO(" +
+            "m )from MeetingPost m where m.userId= :userId ")
+    List<MeetingResponseDTO> findAllMeetingResponseDTOByUserId(Long userId);
+
 }
