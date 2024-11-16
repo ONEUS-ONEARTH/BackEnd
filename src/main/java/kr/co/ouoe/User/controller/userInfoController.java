@@ -3,6 +3,7 @@ package kr.co.ouoe.User.controller;
 import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
 import kr.co.ouoe.User.account.UserAccount;
 import kr.co.ouoe.User.dto.LoginUserResponseDTO;
+import kr.co.ouoe.User.dto.ModifyPasswordDTO;
 import kr.co.ouoe.User.dto.ModifyUserRequestDTO;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.exception.DuplicateEmailException;
@@ -84,6 +85,18 @@ public class userInfoController {
             throw new RuntimeException(e);
         }
     }
+
+    @RequestMapping(method = {PUT,PATCH},path = "/modify/checkpassword")
+    public ResponseEntity<?> updateUserEmail(ModifyPasswordDTO dto, BindingResult result){
+        if(result.hasErrors()){
+            return ResponseEntity.badRequest().body(result.toString());
+        }
+        Boolean flag=userInfoservice.checkPassword(dto);
+
+        return ResponseEntity.ok().body(flag);
+    }
+
+
 
 
 

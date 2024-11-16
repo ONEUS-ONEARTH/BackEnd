@@ -4,6 +4,7 @@ package kr.co.ouoe.User.service;
 import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
+import kr.co.ouoe.User.dto.ModifyPasswordDTO;
 import kr.co.ouoe.User.dto.ModifyUserRequestDTO;
 import kr.co.ouoe.User.dto.TokenUserInfo;
 import kr.co.ouoe.User.entity.User;
@@ -11,8 +12,10 @@ import kr.co.ouoe.User.exception.DuplicateEmailException;
 import kr.co.ouoe.User.exception.NoMatchAccountException;
 import kr.co.ouoe.User.repository.UserRepository;
 import kr.co.ouoe.Util.FileUtil;
+import kr.co.ouoe.Util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,8 @@ public class UserInfoservice {
     private final UserRepository userRepository;
     private final DiyPostRepository diyPostRepository;
     private final UserService userService;
+    private  final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final S3Uploader s3Uploader;
 
     private static final String FILEROOTPATH="D:\\Study\\OneusOnearth_BackEnd\\src\\main\\resources\\static\\images";
 
@@ -52,18 +57,34 @@ public class UserInfoservice {
         user.setPhoneNumber(dto.getPhone());
         user.setAdress(dto.getAdress());
         user.setNickname(dto.getNickname());
+        user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
 
         // dto에 들어온 멀티파트 파일 처리
-        Path localuploadpath= FileUtil.upload(dto.getImage(),FILEROOTPATH);
-        FileUtil.fileUpload(dto.getImage(),localuploadpath);
+        String url=s3Uploader.uploadFileToS3(dto.getImage());
+        //Path localuploadpath= FileUtil.upload(dto.getImage(),FILEROOTPATH);
+        //FileUtil.fileUpload(dto.getImage(),localuploadpath);
 
         //user에 저장
-        user.setImagePath(localuploadpath.toString());
+        user.setImagePath(url);
 
 
         return true;
 
 
+
+    }
+
+    //현재 비밀번호 일치 여부를 확인 합니다.
+    public Boolean checkPassword(ModifyPasswordDTO dto){
+        User user= userRepository.findByEmail(dto.getEmail());
+        String encodedPassword=user.getPassword();
+        String rawPassword=dto.getRawPassword();
+
+        if(!bCryptPasswordEncoder.matches(rawPassword,encodedPassword)){
+            return false;
+        }
+
+        return true;
 
     }
 
