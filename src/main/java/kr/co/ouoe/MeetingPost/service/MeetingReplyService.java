@@ -1,6 +1,7 @@
 package kr.co.ouoe.MeetingPost.service;
 
 import kr.co.ouoe.MeetingPost.domain.MeetingReply;
+import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyResponseDTO;
 import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyResponseList;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -71,7 +73,25 @@ public class MeetingReplyService {
     }
 
     //댓글을 수정합니다
+    public MeetingReplyResponseList modifyReply(MeetingReplyModifyRequestDTO dto){
+        User user=userRepository.findByEmail(dto.getEmail());
+        LocalDateTime updateTime=LocalDateTime.now();
+        Optional<MeetingReply> meetingReply=replyRepository.findById(dto.getReplyId());
+        meetingReply.orElseThrow();
+
+        meetingReply.get().setUserId(user.getId());
+        meetingReply.get().setContent(dto.getContent());
+
+        return getAllReplysByPostId(dto.getPostId());
+
+    }
 
     //댓글을 삭제합니다
+    public MeetingReplyResponseList deleteReply(long replyId, TokenUserInfo userInfo){
+        Optional<MeetingReply> meetingReply= Optional.of(replyRepository.findById(replyId).orElseThrow());
+        long postId=meetingReply.get().getPostId();
+        replyRepository.delete(meetingReply.get());
+        return getAllReplysByPostId(postId);
+    }
 
 }

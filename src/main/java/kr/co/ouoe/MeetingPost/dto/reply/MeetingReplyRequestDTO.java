@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MeetingReplyRequestDTO {
+    private long id;
     private long postId;
     private String content;
 }
