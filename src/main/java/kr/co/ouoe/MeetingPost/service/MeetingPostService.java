@@ -12,6 +12,7 @@ import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
 import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
+import kr.co.ouoe.MeetingPost.repository.MeetingLikeScoreRepository;
 import kr.co.ouoe.MeetingPost.repository.MeetingLocateRepository;
 import kr.co.ouoe.MeetingPost.repository.MeetingPostRepository;
 import kr.co.ouoe.User.account.BookMarkCategory;
@@ -43,6 +44,7 @@ public class MeetingPostService {
     private final MeetingLocateRepository meetingLocateRepository;
     private final BookMarkRepository bookMarkRepository;
     private final S3Uploader s3Uploader;
+    private final MeetingLikeScoreRepository meetingLikeScoreRepository;
 
 
     public MeetingListResponseDTO searchAllMeeting() {
@@ -55,6 +57,7 @@ public class MeetingPostService {
             log.info(userId+"유저 아이디");
             String nickname=userRepository.findById(userId).get().getNickname();
             meetingPost.setAuthor(nickname);
+
         }
 
         return MeetingListResponseDTO.builder()
