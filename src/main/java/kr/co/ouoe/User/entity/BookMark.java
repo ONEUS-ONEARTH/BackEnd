@@ -24,7 +24,7 @@ public class BookMark   {
     private Long userId;
 
     @Column(name = "category")
-    @Enumerated(EnumType.STRING)//업사이클포스트인지 미팅 포스트인지 구분
+    @Enumerated(EnumType.STRING)//업사이클포스트인지 미팅 포스트인지 구분ㅇ
     private BookMarkCategory bookMarkCategory;
 
     @Column(name = "post_id")
