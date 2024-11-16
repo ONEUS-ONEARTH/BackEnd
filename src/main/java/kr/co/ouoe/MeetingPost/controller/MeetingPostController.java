@@ -79,7 +79,7 @@ public class MeetingPostController {
 
     //모임 포스트 작성하기
     @PostMapping("/createmeeting")
-    public ResponseEntity<?> createPost(@RequestBody MeetingPostRequest meetingPostRequest, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
+    public ResponseEntity<?> createPost(MeetingPostRequest meetingPostRequest, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
 
         log.info("createPost 실행중");
         if(result.hasErrors()){
