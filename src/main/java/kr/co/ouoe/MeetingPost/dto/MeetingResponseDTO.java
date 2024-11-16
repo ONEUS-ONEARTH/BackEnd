@@ -26,6 +26,7 @@ public class MeetingResponseDTO {
     private long meetingId;
     private String option; //개인인지 회사인지
 
+
     public MeetingResponseDTO(MeetingPost meetingPost) {
         this.id = meetingPost.getId();
         this.title = meetingPost.getTitle();

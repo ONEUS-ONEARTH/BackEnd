@@ -62,6 +62,13 @@ public class userInfoController {
         PostListResponseDTO postListResponseDTO=userInfoservice.getMyPost(user);
         return ResponseEntity.ok().body(postListResponseDTO);
     }
+    //내가쓴 모임 게시물을 불러옵니다.
+    @GetMapping("/mymeetingPost")
+    public ResponseEntity<?> searchMyMeetingList(@AuthenticationPrincipal TokenUserInfo userAccount){
+        User user = userInfoservice.getUserInfo(userAccount.getEmail());
+        MeetingListResponseDTO meetingListResponseDTO=userInfoservice.getMyMeetingPost(user);
+        return ResponseEntity.ok().body(meetingListResponseDTO);
+    }
 
     // 유저가 찜한 미팅정보를 불러옵니다.
     @GetMapping("/mybookmark")
