@@ -1,4 +1,4 @@
-package kr.co.ouoe.MeetingPost.domain;
+package kr.co.ouoe.MeetingPost.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

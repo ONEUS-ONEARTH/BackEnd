@@ -1,7 +1,6 @@
-package kr.co.ouoe.MeetingPost.domain;
+package kr.co.ouoe.MeetingPost.entity;
 
 import jakarta.persistence.*;
-import kr.co.ouoe.User.entity.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
