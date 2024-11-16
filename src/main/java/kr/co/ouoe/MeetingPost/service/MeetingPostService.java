@@ -44,6 +44,7 @@ public class MeetingPostService {
     private final BookMarkRepository bookMarkRepository;
     private final S3Uploader s3Uploader;
 
+
     public MeetingListResponseDTO searchAllMeeting() {
         List<MeetingResponseDTO> postList = meetingPostRepository.findAllMeetingResponseDTO();
 

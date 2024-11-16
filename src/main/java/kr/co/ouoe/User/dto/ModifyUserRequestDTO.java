@@ -15,6 +15,7 @@ public class ModifyUserRequestDTO {
     private String nickname;
     private String adress;
     private String phone;
+    private String password;
     private MultipartFile image;
 
 }
