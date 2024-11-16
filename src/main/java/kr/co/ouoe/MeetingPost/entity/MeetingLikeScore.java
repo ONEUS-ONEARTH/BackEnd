@@ -8,6 +8,7 @@ import lombok.Setter;
 @Table(name = "meeting_like_score")
 @Getter
 @Setter
+@Entity
 public class MeetingLikeScore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
