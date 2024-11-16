@@ -3,8 +3,12 @@ package kr.co.ouoe.MeetingPost.controller;
 
 import jakarta.transaction.Transactional;
 import kr.co.ouoe.DiyPost.dto.*;
+import kr.co.ouoe.DiyPost.entity.DiyPost;
+import kr.co.ouoe.DiyPost.entity.LikeScore;
+import kr.co.ouoe.MeetingPost.domain.MeetingPost;
 import kr.co.ouoe.MeetingPost.dto.*;
 import kr.co.ouoe.MeetingPost.service.MeetingPostService;
+import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +53,8 @@ public class MeetingPostController {
 
 
 
+
+
     //모임 지역별로 불러오기
     //si-> 시
     //doo-> 도
@@ -73,6 +79,22 @@ public class MeetingPostController {
 
 
         return ResponseEntity.ok().body(isbookmarked);
+    }
+
+    //포스트 좋아요
+    @GetMapping("/posts/score/{postId}")
+    public ResponseEntity<?> updateLikeScore (@PathVariable Long postId,@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
+        if (postId == null || postId.equals("")){
+            return ResponseEntity
+                    .badRequest()
+                    .body(PostListResponseDTO.builder().error("postId는 공백 일 수 없습니다!").build());
+        }
+        if(tokenUserInfo==null){
+            return ResponseEntity.badRequest().body("로그인 후 이용하실수 있어요!");
+        }
+        MeetingListResponseDTO postListResponseDTO = meetingPostService.updateLikeScore(postId, tokenUserInfo.getEmail());
+
+        return ResponseEntity.ok().body(postListResponseDTO);
     }
 
 

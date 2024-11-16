@@ -5,6 +5,8 @@ import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
 import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
+import kr.co.ouoe.DiyPost.entity.LikeScore;
+import kr.co.ouoe.MeetingPost.domain.MeetingLikeScore;
 import kr.co.ouoe.MeetingPost.domain.MeetingLocate;
 import kr.co.ouoe.MeetingPost.domain.MeetingPost;
 import kr.co.ouoe.MeetingPost.domain.Option;
@@ -231,6 +233,38 @@ public class MeetingPostService {
         }
 
         return meetingResponseDTO;
+    }
+
+    //포스트 좋아요 업데이트
+    public MeetingListResponseDTO updateLikeScore(long postId,String email){
+        // 포스트 가져오기
+        MeetingPost meetingPost=meetingPostRepository.getOne(postId);
+        //User 데려오기
+        User user=userRepository.findByEmail(email);
+        int likeSocre=meetingPost.getLikeScore();
+        boolean isExists= meetingLikeScoreRepository.existsMeetingLikeScoreByIdAndPostId(postId,user.getId());
+        //  Like 에서 posiId,와 UserId 조회 가져오기-> 이전에 유저가 굿을 누른적이 있는지 가져오기
+        if(isExists){
+            //존재하면 -1로 감소
+            meetingPost.setLikeScore(likeSocre-1);
+            MeetingLikeScore likeScore = meetingLikeScoreRepository.findMeetingLikeScoreByPostIdAndUserId(postId,user.getId());
+            meetingLikeScoreRepository.delete(likeScore);
+
+
+        }else{
+            //존재하지 않으면 1 업데이드
+            meetingPost.setLikeScore(likeSocre+1);
+
+            // 굿 표시한사람 저장.
+            MeetingLikeScore likeScore =new MeetingLikeScore();
+            likeScore.setPostId(postId);
+            likeScore.setUserId(user.getId());
+            meetingLikeScoreRepository.save(likeScore);
+
+        }
+
+
+        return searchAllMeeting();
     }
 
 
