@@ -4,23 +4,31 @@ package kr.co.ouoe.User.service;
 import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
 import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
+import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
+import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
+import kr.co.ouoe.MeetingPost.repository.MeetingPostRepository;
+import kr.co.ouoe.User.account.BookMarkCategory;
 import kr.co.ouoe.User.dto.ModifyPasswordDTO;
 import kr.co.ouoe.User.dto.ModifyUserRequestDTO;
-import kr.co.ouoe.User.dto.TokenUserInfo;
+import kr.co.ouoe.User.entity.BookMark;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.exception.DuplicateEmailException;
 import kr.co.ouoe.User.exception.NoMatchAccountException;
+import kr.co.ouoe.User.repository.BookMarkRepository;
 import kr.co.ouoe.User.repository.UserRepository;
 import kr.co.ouoe.Util.FileUtil;
 import kr.co.ouoe.Util.S3Uploader;
+import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Book;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,11 +40,13 @@ public class UserInfoservice {
 
     private final UserRepository userRepository;
     private final DiyPostRepository diyPostRepository;
+    private final MeetingPostRepository meetingPostRepository;
     private final UserService userService;
     private  final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final S3Uploader s3Uploader;
 
     private static final String FILEROOTPATH="D:\\Study\\OneusOnearth_BackEnd\\src\\main\\resources\\static\\images";
+    private final BookMarkRepository bookMarkRepository;
 
     public User getUserInfo(String email){
 
@@ -103,6 +113,32 @@ public class UserInfoservice {
                 .boards(postResponseDTOList)
                 .build();
         return postListResponseDTO;
+
+    }
+
+    // 내가 북마크해둔 미팅 정보를 불러옵니다.
+    public MeetingListResponseDTO getMyMeetingBookMarkList(TokenUserInfo tokenUserInfo){
+        User user=userRepository.findByEmail(tokenUserInfo.getEmail());
+        List<BookMark> bookMarkList=bookMarkRepository.findAllByUserIdAndBookMarkCategory(user.getId(), BookMarkCategory.MEETING.toString());
+        List<MeetingResponseDTO> meetingResponseDTOList=new ArrayList<>();
+
+        for(BookMark bookMark:bookMarkList){
+            MeetingResponseDTO meetingResponseDTO=new MeetingResponseDTO();
+            meetingPostRepository.findById(bookMark.getPostId()).ifPresent(post->{
+                meetingResponseDTO.setMeetingId(post.getId());
+                meetingResponseDTO.setUserId(post.getUserId());
+                meetingResponseDTO.setEditable(true);
+                meetingResponseDTO.setCreateDate(post.getCreatedAt());
+                meetingResponseDTO.setTitle(post.getTitle());
+                meetingResponseDTO.setContent(post.getContent());
+                meetingResponseDTO.setAuthor(user.getNickname());
+                meetingResponseDTO.setThumbnailUrl(post.getThumbNail());
+                meetingResponseDTO.setOption(post.getOption().toString());
+            });
+            meetingResponseDTOList.add(meetingResponseDTO);
+        }
+        MeetingListResponseDTO meetingListResponseDTO=MeetingListResponseDTO.builder().boards(meetingResponseDTOList).build();
+        return meetingListResponseDTO;
 
     }
 }

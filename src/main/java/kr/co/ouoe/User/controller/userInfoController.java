@@ -1,6 +1,7 @@
 package kr.co.ouoe.User.controller;
 
 import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
+import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
 import kr.co.ouoe.User.account.UserAccount;
 import kr.co.ouoe.User.dto.LoginUserResponseDTO;
 import kr.co.ouoe.User.dto.ModifyPasswordDTO;
@@ -64,9 +65,9 @@ public class userInfoController {
 
     // 유저가 찜한 미팅정보를 불러옵니다.
     @GetMapping("/mybookmark")
-    public ResponseEntity<?> searchMyBookmarkList(@AuthenticationPrincipal TokenUserInfo userAccount){
-
-        return null;
+    public ResponseEntity<?> searchMyBookmarkList(@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
+        MeetingListResponseDTO meetingListResponseDTO=userInfoservice.getMyMeetingBookMarkList(tokenUserInfo);
+        return ResponseEntity.ok().body(meetingListResponseDTO);
     }
 
     //유저정보를 수정합니다.(비밀번호, 이메일 제외)
