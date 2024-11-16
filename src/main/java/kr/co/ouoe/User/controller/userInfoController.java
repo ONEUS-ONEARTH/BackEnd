@@ -87,7 +87,7 @@ public class userInfoController {
     }
 
     @RequestMapping(method = {PUT,PATCH},path = "/modify/checkpassword")
-    public ResponseEntity<?> updateUserEmail(ModifyPasswordDTO dto, BindingResult result){
+    public ResponseEntity<?> checkCurrentEmail(@RequestBody  ModifyPasswordDTO dto, BindingResult result){
         if(result.hasErrors()){
             return ResponseEntity.badRequest().body(result.toString());
         }
