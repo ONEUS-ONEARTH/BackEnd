@@ -1,7 +1,7 @@
 package kr.co.ouoe.MeetingPost.dto;
 
 
-import kr.co.ouoe.MeetingPost.domain.MeetingPost;
+import kr.co.ouoe.MeetingPost.entity.MeetingPost;
 import lombok.*;
 
 import java.time.LocalDateTime;

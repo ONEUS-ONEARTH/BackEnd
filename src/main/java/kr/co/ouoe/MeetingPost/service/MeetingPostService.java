@@ -1,15 +1,10 @@
 package kr.co.ouoe.MeetingPost.service;
 
 
-import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
-import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
-import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
-import kr.co.ouoe.DiyPost.entity.DiyPost;
-import kr.co.ouoe.DiyPost.entity.LikeScore;
-import kr.co.ouoe.MeetingPost.domain.MeetingLikeScore;
-import kr.co.ouoe.MeetingPost.domain.MeetingLocate;
-import kr.co.ouoe.MeetingPost.domain.MeetingPost;
-import kr.co.ouoe.MeetingPost.domain.Option;
+import kr.co.ouoe.MeetingPost.entity.MeetingLikeScore;
+import kr.co.ouoe.MeetingPost.entity.MeetingLocate;
+import kr.co.ouoe.MeetingPost.entity.MeetingPost;
+import kr.co.ouoe.MeetingPost.entity.Option;
 import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
@@ -35,7 +30,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

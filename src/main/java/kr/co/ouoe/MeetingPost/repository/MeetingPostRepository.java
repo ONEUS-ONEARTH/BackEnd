@@ -1,8 +1,6 @@
 package kr.co.ouoe.MeetingPost.repository;
 
-import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
-import kr.co.ouoe.DiyPost.entity.DiyPost;
-import kr.co.ouoe.MeetingPost.domain.MeetingPost;
+import kr.co.ouoe.MeetingPost.entity.MeetingPost;
 import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

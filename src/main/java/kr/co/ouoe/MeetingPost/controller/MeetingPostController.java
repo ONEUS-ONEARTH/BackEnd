@@ -3,12 +3,8 @@ package kr.co.ouoe.MeetingPost.controller;
 
 import jakarta.transaction.Transactional;
 import kr.co.ouoe.DiyPost.dto.*;
-import kr.co.ouoe.DiyPost.entity.DiyPost;
-import kr.co.ouoe.DiyPost.entity.LikeScore;
-import kr.co.ouoe.MeetingPost.domain.MeetingPost;
 import kr.co.ouoe.MeetingPost.dto.*;
 import kr.co.ouoe.MeetingPost.service.MeetingPostService;
-import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
