@@ -40,7 +40,11 @@ public class MeetingPost  {
    @Column(name = "user_id",nullable = false)
    private Long userId;
 
-   @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @Column(name = "like_score",nullable = false)
+    private int likeScore = 0;
+
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
    @JoinColumn(name = "meeting_locate_id", referencedColumnName = "id")
    private MeetingLocate meetingLocate;
 
