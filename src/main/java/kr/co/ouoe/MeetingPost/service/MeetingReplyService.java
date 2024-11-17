@@ -1,6 +1,6 @@
 package kr.co.ouoe.MeetingPost.service;
 
-import kr.co.ouoe.MeetingPost.domain.MeetingReply;
+import kr.co.ouoe.MeetingPost.entity.MeetingReply;
 import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyModifyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyRequestDTO;
 import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyResponseDTO;
@@ -8,12 +8,10 @@ import kr.co.ouoe.MeetingPost.dto.reply.MeetingReplyResponseList;
 import kr.co.ouoe.MeetingPost.repository.MeetingReplyRepository;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.repository.UserRepository;
-import kr.co.ouoe.User.service.UserService;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
