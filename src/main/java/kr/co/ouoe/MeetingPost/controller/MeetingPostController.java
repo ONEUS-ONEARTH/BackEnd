@@ -115,7 +115,7 @@ public class MeetingPostController {
 
     //모임 포스트 수정하기
     @RequestMapping(method = {PUT,PATCH},path = "/modify")
-    public ResponseEntity<?> UpdatePost(@RequestBody MeetingPostModifyRequestDTO modifyRequestDTO){
+    public ResponseEntity<?> UpdatePost(MeetingPostModifyRequestDTO modifyRequestDTO){
 
         try{
             boolean isupdate=meetingPostService.modifyPost(modifyRequestDTO);

@@ -120,12 +120,14 @@ public class MeetingPostService {
     }
 
     //미팅 포스트 수정
-    public boolean modifyPost(MeetingPostModifyRequestDTO modifyRequestDTO) {
+    public boolean modifyPost(MeetingPostModifyRequestDTO modifyRequestDTO) throws IOException {
         MeetingPost meetingPost = meetingPostRepository.getOne(modifyRequestDTO.getMeetingPostId());
         //1. 포스트 수정
         meetingPost.setTitle(modifyRequestDTO.getTitle());
         meetingPost.setContent(modifyRequestDTO.getContent());
-        meetingPost.setThumbNail(modifyRequestDTO.getThumbnailUrl());
+        // 기존 url에서 파일 지우기
+        String s3Url=s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnail());
+        meetingPost.setThumbNail(s3Url);
         //2 . 위치(경도,위도) 수정
 //        MeetingLocate meetingLocate=meetingLocateRepository.getOne(meetingPost.getMeetingLocateId());
 //        meetingLocate.setLantitude(modifyRequestDTO.getX());
