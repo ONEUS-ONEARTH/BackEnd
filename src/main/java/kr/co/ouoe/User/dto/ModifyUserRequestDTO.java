@@ -11,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @Builder
 public class ModifyUserRequestDTO {
-    private String email;
+
     private String nickname;
     private String adress;
     private String phone;
-    private String password;
+
     private MultipartFile image;
 
 }

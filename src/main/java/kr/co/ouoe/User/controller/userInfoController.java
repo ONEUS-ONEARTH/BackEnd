@@ -79,13 +79,13 @@ public class userInfoController {
 
     //유저정보를 수정합니다.(비밀번호, 이메일 제외)
     @RequestMapping(method = {PUT, PATCH}, path = "/modify")
-    public ResponseEntity<?> updateUser(@Validated ModifyUserRequestDTO dto, BindingResult result){
+    public ResponseEntity<?> updateUser(@Validated ModifyUserRequestDTO dto,@AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
         log.info("dto: {}", dto.toString());
         if(result.hasErrors()){
             return ResponseEntity.badRequest().body(result.toString());
         }
         try{
-            boolean flag = userInfoservice.modifyUser(dto);
+            boolean flag = userInfoservice.modifyUser(dto,tokenUserInfo);
             return ResponseEntity.ok().body(flag);
         }catch (NoMatchAccountException | DuplicateEmailException  e){
             return ResponseEntity.badRequest().body(e.getMessage());
