@@ -227,7 +227,7 @@ public class upcyclePostService {
     }
 
     //포스트 좋아요 업데이트
-    public PostListResponseDTO updateLikeScore(long postId,String email){
+    public PostResponseDTO updateLikeScore(long postId, String email){
         // 포스트 가져오기
         DiyPost diyPost=diyPostRepository.getOne(postId);
         //User 데려오기
@@ -255,7 +255,7 @@ public class upcyclePostService {
         }
 
 
-        return searchAllPost();
+        return searchPostById(postId,null);
     }
 //
 
