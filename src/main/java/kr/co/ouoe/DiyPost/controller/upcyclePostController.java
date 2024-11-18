@@ -89,7 +89,7 @@ public class upcyclePostController {
 
     //업사이클 게시물을 올리는 로직
     @PostMapping("/createpost")
-    public ResponseEntity<?> createPost(@RequestBody PostRequestDTO postRequestDTO, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
+    public ResponseEntity<?> createPost( PostRequestDTO postRequestDTO, @AuthenticationPrincipal TokenUserInfo tokenUserInfo, BindingResult result){
 
         log.info("createPost 실행중");
         if(result.hasErrors()){
