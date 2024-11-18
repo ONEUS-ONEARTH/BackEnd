@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MeetingLikeScoreRepository extends JpaRepository<MeetingLikeScore,Long> {
 
-    boolean existsMeetingLikeScoreByIdAndPostId(long postId, long userId);
+    boolean existsMeetingLikeScoreByPostIdAndUserId(long postId, long userId);
     MeetingLikeScore findMeetingLikeScoreByPostIdAndUserId(long postId, long userId);
 }
