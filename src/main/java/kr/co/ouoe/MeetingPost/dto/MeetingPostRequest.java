@@ -17,6 +17,7 @@ public class MeetingPostRequest {
     private String thumbnailUrl;
     private String option; //개인또는 회사주최
     private MultipartFile thumnailImg;
+    private String address;
     // 주후에 시작일 기입 예정
     private Double x; //위도
     private Double y; //경도
