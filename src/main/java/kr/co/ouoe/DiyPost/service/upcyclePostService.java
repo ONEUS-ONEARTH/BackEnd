@@ -12,6 +12,7 @@ import kr.co.ouoe.DiyPost.repository.DiyPostRepository;
 import kr.co.ouoe.DiyPost.repository.LikeScoreRepository;
 import kr.co.ouoe.User.entity.User;
 import kr.co.ouoe.User.repository.UserRepository;
+import kr.co.ouoe.Util.S3Uploader;
 import kr.co.ouoe.Util.TokenUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class upcyclePostService {
     private final UserRepository userRepository;
     private final DiyMeterialRepository diyMeterialRepository;
     private  final LikeScoreRepository likeScoreRepository;
+    private final S3Uploader s3Uploader;
 
     //게시물 불러오기
     public  PostListResponseDTO searchAllPost(){
@@ -163,7 +166,7 @@ public class upcyclePostService {
     }
 
     //upcycle 포스트 등록
-    public PostListResponseDTO createPost(PostRequestDTO postRequestDTO, String email) {
+    public PostListResponseDTO createPost(PostRequestDTO postRequestDTO, String email) throws IOException {
 
         log.info(postRequestDTO.getTitle());
         User user=userRepository.findByEmail(email);
@@ -173,7 +176,8 @@ public class upcyclePostService {
 
         //Diypost 저장,태그까지 저장
         LocalDateTime createDateTime=LocalDateTime.now();
-        DiyPost newDiyPost= new DiyPost(postRequestDTO.getTitle(), postRequestDTO.getContent(),createDateTime, postRequestDTO.getThumbnailUrl(), postRequestDTO.getTag(),user.getId());
+        String s3Url= s3Uploader.uploadFileToS3(postRequestDTO.getThumbnailUrl());
+        DiyPost newDiyPost= new DiyPost(postRequestDTO.getTitle(), postRequestDTO.getContent(),createDateTime,s3Url , postRequestDTO.getTag(),user.getId());
         diyPostRepository.save(newDiyPost);
 
         return searchAllPost();
