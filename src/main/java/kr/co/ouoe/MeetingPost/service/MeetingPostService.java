@@ -130,12 +130,11 @@ public class MeetingPostService {
             String s3Url=s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnail());
             meetingPost.setThumbNail(s3Url);
         }
-        // 기존 url에서 파일 지우기
 
         //2 . 위치(경도,위도) 수정
-//        MeetingLocate meetingLocate=meetingLocateRepository.getOne(meetingPost.getMeetingLocateId());
-//        meetingLocate.setLantitude(modifyRequestDTO.getX());
-//        meetingLocate.setLongitude(modifyRequestDTO.getY());
+        meetingPost.getMeetingLocate().setX(modifyRequestDTO.getX());
+        meetingPost.getMeetingLocate().setY(modifyRequestDTO.getY());
+        meetingPost.getMeetingLocate().setAddress(modifyRequestDTO.getAddress());
 
         return true;
     }
