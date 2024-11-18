@@ -25,6 +25,7 @@ public class MeetingResponseDTO {
     private long userId;
     private long meetingId;
     private String option; //개인인지 회사인지
+    private String address; //주소
 
 
     public MeetingResponseDTO(MeetingPost meetingPost) {
