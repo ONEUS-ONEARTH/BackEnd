@@ -88,7 +88,7 @@ public class MeetingPostController {
         if(tokenUserInfo==null){
             return ResponseEntity.badRequest().body("로그인 후 이용하실수 있어요!");
         }
-        MeetingResponseDTO postListResponseDTO = meetingPostService.updateLikeScore(postId, tokenUserInfo.getEmail());
+        MeetingResponseDTO postListResponseDTO = meetingPostService.updateLikeScore(postId, tokenUserInfo);
 
         return ResponseEntity.ok().body(postListResponseDTO);
     }

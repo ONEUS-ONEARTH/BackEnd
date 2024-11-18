@@ -243,11 +243,11 @@ public class MeetingPostService {
     }
 
     //포스트 좋아요 업데이트
-    public MeetingResponseDTO updateLikeScore(long postId, String email){
+    public MeetingResponseDTO updateLikeScore(long postId, TokenUserInfo tokenUserInfo){
         // 포스트 가져오기
         MeetingPost meetingPost=meetingPostRepository.getOne(postId);
         //User 데려오기
-        User user=userRepository.findByEmail(email);
+        User user=userRepository.findByEmail(tokenUserInfo.getEmail());
         int likeSocre=meetingPost.getLikeScore();
         boolean isExists= meetingLikeScoreRepository.existsMeetingLikeScoreByPostIdAndUserId(postId,user.getId());
         //  Like 에서 posiId,와 UserId 조회 가져오기-> 이전에 유저가 굿을 누른적이 있는지 가져오기
@@ -271,7 +271,7 @@ public class MeetingPostService {
         }
 
 
-        return searchPostById(postId,null);
+        return searchPostById(postId,tokenUserInfo);
     }
 
 
