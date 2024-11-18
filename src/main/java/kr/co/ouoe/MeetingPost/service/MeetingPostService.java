@@ -189,10 +189,10 @@ public class MeetingPostService {
         MeetingPost meetingPost = meetingPostRepository.getOne(id);
         User user = userRepository.getOne(meetingPost.getUserId());
         MeetingResponseDTO meetingResponseDTO;
-
+        meetingResponseDTO = new MeetingResponseDTO();
         if (tokenUserInfo == null) {
             // 토큰이 없으면 로그인한 사용자가 아님
-            meetingResponseDTO = new MeetingResponseDTO();
+
             meetingResponseDTO.setId(meetingPost.getId());
             meetingResponseDTO.setTitle(meetingPost.getTitle());
             meetingResponseDTO.setContent(meetingPost.getContent());
@@ -208,7 +208,7 @@ public class MeetingPostService {
 
         } else {
             if (tokenUserInfo.getEmail().equals(user.getEmail())) {
-                meetingResponseDTO = new MeetingResponseDTO();
+
                 meetingResponseDTO.setId(meetingPost.getId());
                 meetingResponseDTO.setTitle(meetingPost.getTitle());
                 meetingResponseDTO.setContent(meetingPost.getContent());
@@ -223,8 +223,7 @@ public class MeetingPostService {
                 //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
             } else {
-                meetingResponseDTO = new MeetingResponseDTO();
-                meetingResponseDTO.setId(meetingPost.getId());
+
                 meetingResponseDTO.setTitle(meetingPost.getTitle());
                 meetingResponseDTO.setContent(meetingPost.getContent());
                 meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
