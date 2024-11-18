@@ -58,6 +58,7 @@ public class MeetingPostService {
 
         return MeetingListResponseDTO.builder()
                 .boards(postList)
+                .totalPost(postList.size())
                 .build();
 
     }

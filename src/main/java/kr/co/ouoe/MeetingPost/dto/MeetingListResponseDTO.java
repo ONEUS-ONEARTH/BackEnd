@@ -17,4 +17,5 @@ public class MeetingListResponseDTO {
 
     private String error;
     private List<MeetingResponseDTO> boards;
+    private int totalPost;
 }
