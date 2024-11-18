@@ -106,7 +106,7 @@ public class MeetingPostService {
 
         //1.MeetingPost저장 저장,태그까지 저장
         LocalDateTime createDateTime = LocalDateTime.now();
-        MeetingLocate meetingLocate = MeetingLocate.builder().x(meetingPostRequest.getX()).y(meetingPostRequest.getY()).build();
+        MeetingLocate meetingLocate = MeetingLocate.builder().x(meetingPostRequest.getX()).y(meetingPostRequest.getY()).address(meetingPostRequest.getAddress()).build();
        String url= s3Uploader.uploadFileToS3(meetingPostRequest.getThumnailImg());
         MeetingPost newMeetingPost = new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(), createDateTime, meetingPostRequest.getThumbnailUrl(), user.getId(),
                 meetingPostRequest.getOption().equals("개인") ? Option.개인 : Option.회사, meetingLocate);
@@ -125,9 +125,13 @@ public class MeetingPostService {
         //1. 포스트 수정
         meetingPost.setTitle(modifyRequestDTO.getTitle());
         meetingPost.setContent(modifyRequestDTO.getContent());
+
+        if(modifyRequestDTO.getThumbnail()!=null){
+            String s3Url=s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnail());
+            meetingPost.setThumbNail(s3Url);
+        }
         // 기존 url에서 파일 지우기
-        String s3Url=s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnail());
-        meetingPost.setThumbNail(s3Url);
+
         //2 . 위치(경도,위도) 수정
 //        MeetingLocate meetingLocate=meetingLocateRepository.getOne(meetingPost.getMeetingLocateId());
 //        meetingLocate.setLantitude(modifyRequestDTO.getX());
@@ -200,6 +204,7 @@ public class MeetingPostService {
             meetingResponseDTO.setUserId(user.getId());
             meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
             meetingResponseDTO.setOption(meetingPost.getOption().toString());
+            meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
             //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
         } else {
@@ -214,6 +219,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setUserId(user.getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
+                meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
                 //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
             } else {
@@ -227,6 +233,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setUserId(user.getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
+                meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
                 // meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
             }
         }
