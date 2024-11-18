@@ -85,8 +85,8 @@ public class userInfoController {
             return ResponseEntity.badRequest().body(result.toString());
         }
         try{
-            boolean flag = userInfoservice.modifyUser(dto,tokenUserInfo);
-            return ResponseEntity.ok().body(flag);
+            User user = userInfoservice.modifyUser(dto,tokenUserInfo);
+            return ResponseEntity.ok().body(user);
         }catch (NoMatchAccountException | DuplicateEmailException  e){
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IOException e) {

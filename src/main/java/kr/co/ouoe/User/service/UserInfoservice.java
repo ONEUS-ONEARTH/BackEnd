@@ -54,7 +54,7 @@ public class UserInfoservice {
 
     }
     //유저 정보를 수정합니다.
-    public Boolean modifyUser(ModifyUserRequestDTO dto,TokenUserInfo tokenUserInfo) throws IOException {
+    public User modifyUser(ModifyUserRequestDTO dto,TokenUserInfo tokenUserInfo) throws IOException {
         User user= userRepository.findByEmail(tokenUserInfo.getEmail());
         if (user == null) {
             throw new NoMatchAccountException("일치하는 계정이 없습니다");
@@ -68,16 +68,19 @@ public class UserInfoservice {
         user.setAdress(dto.getAdress());
         user.setNickname(dto.getNickname());
 
-        // dto에 들어온 멀티파트 파일 처리
-        String url=s3Uploader.uploadFileToS3(dto.getImage());
+        if(dto.getImage()!=null){
+            String url=s3Uploader.uploadFileToS3(dto.getImage());
+            user.setImagePath(url);
+        }
+
         //Path localuploadpath= FileUtil.upload(dto.getImage(),FILEROOTPATH);
         //FileUtil.fileUpload(dto.getImage(),localuploadpath);
 
         //user에 저장
-        user.setImagePath(url);
 
 
-        return true;
+
+        return user;
 
 
 
