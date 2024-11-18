@@ -26,6 +26,7 @@ public class MeetingResponseDTO {
     private long meetingId;
     private String option; //개인인지 회사인지
     private String address; //주소
+    private int likeScore;
 
 
     public MeetingResponseDTO(MeetingPost meetingPost) {
@@ -36,6 +37,7 @@ public class MeetingResponseDTO {
         this.createDate=meetingPost.getCreatedAt();
         this.userId=meetingPost.getUserId();
         this.option=meetingPost.getOption().toString();
+        this.likeScore=meetingPost.getLikeScore();
 
     }
 

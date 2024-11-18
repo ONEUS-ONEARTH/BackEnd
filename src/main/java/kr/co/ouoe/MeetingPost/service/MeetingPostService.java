@@ -204,6 +204,7 @@ public class MeetingPostService {
             meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
             meetingResponseDTO.setOption(meetingPost.getOption().toString());
             meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
+            meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
             //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
         } else {
@@ -219,6 +220,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
                 meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
+                meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
                 //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
             } else {
@@ -233,6 +235,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
                 meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
+                meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
                 // meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
             }
         }
