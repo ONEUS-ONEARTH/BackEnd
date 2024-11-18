@@ -106,11 +106,10 @@ public class MeetingPostService {
 
         //1.MeetingPost저장 저장,태그까지 저장
         LocalDateTime createDateTime = LocalDateTime.now();
-        MeetingLocate meetingLocate = MeetingLocate.builder().x(meetingPostRequest.getX()).y(meetingPostRequest.getY()).address(meetingPostRequest.getAddress()).build();
+        MeetingLocate meetingLocate = MeetingLocate.builder().x(meetingPostRequest.getX()).y(meetingPostRequest.getY()).address(meetingPostRequest.getAdress()).build();
        String url= s3Uploader.uploadFileToS3(meetingPostRequest.getThumnailImg());
-        MeetingPost newMeetingPost = new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(), createDateTime, meetingPostRequest.getThumbnailUrl(), user.getId(),
+        MeetingPost newMeetingPost = new MeetingPost(meetingPostRequest.getTitle(), meetingPostRequest.getContent(), createDateTime, url, user.getId(),
                 meetingPostRequest.getOption().equals("개인") ? Option.개인 : Option.회사, meetingLocate);
-        newMeetingPost.setThumbNail(url);
         meetingPostRepository.save(newMeetingPost);
         // long meetingPostId= meetingPostRepository.save(newMeetingPost).getId();
 
@@ -203,7 +202,7 @@ public class MeetingPostService {
             meetingResponseDTO.setUserId(user.getId());
             meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
             meetingResponseDTO.setOption(meetingPost.getOption().toString());
-            meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
+            meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
             meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
             //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
@@ -219,7 +218,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setUserId(user.getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
-                meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
+                meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
                 meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
                 //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
@@ -234,7 +233,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setUserId(user.getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
-                meetingResponseDTO.setAddress(meetingPost.getMeetingLocate().getAddress());
+                meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
                 meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
                 // meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
             }
