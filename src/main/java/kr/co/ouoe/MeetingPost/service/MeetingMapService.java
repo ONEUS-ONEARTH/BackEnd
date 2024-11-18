@@ -1,7 +1,7 @@
 package kr.co.ouoe.MeetingPost.service;
 
 
-import kr.co.ouoe.MeetingPost.domain.MeetingLocate;
+import kr.co.ouoe.MeetingPost.entity.MeetingLocate;
 import kr.co.ouoe.MeetingPost.dto.map.MapListResponseDTO;
 import kr.co.ouoe.MeetingPost.dto.map.MapResponseDTO;
 import kr.co.ouoe.MeetingPost.repository.MeetingLocateRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
