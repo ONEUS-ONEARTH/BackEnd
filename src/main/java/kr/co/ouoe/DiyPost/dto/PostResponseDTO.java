@@ -25,6 +25,7 @@ public class PostResponseDTO {
     private boolean isEditable;
     private boolean isCilcked;
     private int likeScore;
+    private String thumbnailUrl;
 
     public PostResponseDTO(DiyPost diyPost) {
         this.id = diyPost.getId();
@@ -33,6 +34,7 @@ public class PostResponseDTO {
         this.content = diyPost.getContent();
         this.userId = diyPost.getUserId();
         this.likeScore=diyPost.getLikeScore();
+        this.thumbnailUrl= diyPost.getThumbnailurl();
         //this.author=diyPost.getUser().getNickname();
         this.createdDate = diyPost.getCreatedAt();
     }
