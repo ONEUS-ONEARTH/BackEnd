@@ -87,7 +87,7 @@ public class upcyclePostService {
     public  PostResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo){
 
         DiyPost diyPost=diyPostRepository.getOne(id);
-        User user=userRepository.getOne(diyPost.getUserId());
+        User user=userRepository.findByEmail(tokenUserInfo.getEmail());
         PostResponseDTO postResponseDTO;
 
         if(tokenUserInfo==null){
@@ -108,6 +108,8 @@ public class upcyclePostService {
         }
         else{
             boolean isClicked= likeScoreRepository.existsLikeScoreByPostIdAndUserId(diyPost.getId(), user.getId());
+            log.info("포스트 id {},유저 id{}",diyPost.getId(),diyPost.getUserId());
+            log.info("클릭 여부 {}",isClicked);
             if(tokenUserInfo.getEmail().equals(user.getEmail())){
 
                 postResponseDTO=PostResponseDTO.builder()
@@ -227,11 +229,11 @@ public class upcyclePostService {
     }
 
     //포스트 좋아요 업데이트
-    public PostResponseDTO updateLikeScore(long postId, String email){
+    public PostResponseDTO updateLikeScore(long postId, TokenUserInfo tokenUserInfo){
         // 포스트 가져오기
         DiyPost diyPost=diyPostRepository.getOne(postId);
         //User 데려오기
-        User user=userRepository.findByEmail(email);
+        User user=userRepository.findByEmail(tokenUserInfo.getEmail());
         int likeSocre=diyPost.getLikeScore();
         boolean isExists= likeScoreRepository.existsLikeScoreByPostIdAndUserId(postId,user.getId());
         //  Like 에서 posiId,와 UserId 조회 가져오기-> 이전에 유저가 굿을 누른적이 있는지 가져오기
@@ -240,6 +242,7 @@ public class upcyclePostService {
             diyPost.setLikeScore(likeSocre-1);
             LikeScore likeScore = likeScoreRepository.findLikeScoreByPostIdAndUserId(postId,user.getId());
             likeScoreRepository.delete(likeScore);
+
 
 
         }else{
@@ -255,7 +258,7 @@ public class upcyclePostService {
         }
 
 
-        return searchPostById(postId,null);
+        return searchPostById(postId,tokenUserInfo);
     }
 //
 
