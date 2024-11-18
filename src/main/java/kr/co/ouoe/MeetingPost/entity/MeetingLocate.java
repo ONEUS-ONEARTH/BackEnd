@@ -23,10 +23,14 @@ public class MeetingLocate {
     @Column(name = "longitude",nullable = false)
     private Double y;
 
+    @Column(name="address",nullable = false)
+    private String address;
+
 
     @Builder
-    public MeetingLocate( Double x, Double y) {
+    public MeetingLocate( Double x, Double y,String address) {
         this.x =x;
         this.y = y;
+        this.address=address;
     }
 }
