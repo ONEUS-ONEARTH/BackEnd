@@ -134,7 +134,7 @@ public class MeetingPostService {
         //2 . 위치(경도,위도) 수정
         meetingPost.getMeetingLocate().setX(modifyRequestDTO.getX());
         meetingPost.getMeetingLocate().setY(modifyRequestDTO.getY());
-        meetingPost.getMeetingLocate().setAddress(modifyRequestDTO.getAddress());
+        meetingPost.getMeetingLocate().setAddress(modifyRequestDTO.getAdress());
 
         return true;
     }

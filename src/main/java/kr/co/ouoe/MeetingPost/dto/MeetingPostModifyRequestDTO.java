@@ -20,5 +20,5 @@ public class MeetingPostModifyRequestDTO {
     private MultipartFile thumbnail;
     private Double x;//위도
     private Double y;//경도
-    private String address;
+    private String adress;
 }
