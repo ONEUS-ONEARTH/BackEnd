@@ -22,6 +22,7 @@ public class MeetingResponseDTO {
     private String author;
     private  LocalDateTime createDate;
     private boolean isEditable;
+    private boolean isCilcked;
     private long userId;
     private long meetingId;
     private String option; //개인인지 회사인지

@@ -188,12 +188,12 @@ public class MeetingPostService {
     public MeetingResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo) {
 
         MeetingPost meetingPost = meetingPostRepository.getOne(id);
-        User user = userRepository.getOne(meetingPost.getUserId());
+        // 이포스트에 따봉을 누른 유저
+        User user = userRepository.findByEmail(tokenUserInfo.getEmail());
         MeetingResponseDTO meetingResponseDTO;
         meetingResponseDTO = new MeetingResponseDTO();
         if (tokenUserInfo == null) {
             // 토큰이 없으면 로그인한 사용자가 아님
-
             meetingResponseDTO.setId(meetingPost.getId());
             meetingResponseDTO.setTitle(meetingPost.getTitle());
             meetingResponseDTO.setContent(meetingPost.getContent());
@@ -205,10 +205,13 @@ public class MeetingPostService {
             meetingResponseDTO.setOption(meetingPost.getOption().toString());
             meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
             meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
+            meetingResponseDTO.setCilcked(false);
             //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
         } else {
+           boolean cilcked= meetingLikeScoreRepository.existsMeetingLikeScoreByPostIdAndUserId(meetingPost.getId(), user.getId());
             if (tokenUserInfo.getEmail().equals(user.getEmail())) {
+                // 이게자기가 작성한거면
 
                 meetingResponseDTO.setId(meetingPost.getId());
                 meetingResponseDTO.setTitle(meetingPost.getTitle());
@@ -221,6 +224,7 @@ public class MeetingPostService {
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
                 meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
                 meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
+                meetingResponseDTO.setCilcked(cilcked);
                 //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
             } else {
@@ -235,6 +239,8 @@ public class MeetingPostService {
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
                 meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
                 meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
+                meetingResponseDTO.setCilcked(cilcked);
+
                 // meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
             }
         }
