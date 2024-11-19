@@ -108,7 +108,7 @@ public class upcyclePostController {
 
     //포스트 수정 요청
     @RequestMapping(method = {PUT,PATCH},path = "/modify")
-    public ResponseEntity<?> UpdatePost(@RequestBody PostModifyRequestDTO postModifyRequestDTO){
+    public ResponseEntity<?> UpdatePost(PostModifyRequestDTO postModifyRequestDTO){
         log.info(postModifyRequestDTO.toString());
 
         try{

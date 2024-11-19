@@ -193,13 +193,16 @@ public class upcyclePostService {
     }
 
     //pucycle 포스트 수정
-    public boolean modifyPost(PostModifyRequestDTO modifyRequestDTO) {
+    public boolean modifyPost(PostModifyRequestDTO modifyRequestDTO) throws IOException {
         DiyPost diyPost=diyPostRepository.getOne(modifyRequestDTO.getPostId());
         //String user= userRepository.findById(diyPost.getUserId());
         diyPost.setTitle(modifyRequestDTO.getTitle());
         diyPost.setContent(modifyRequestDTO.getContent());
         diyPost.setTag(modifyRequestDTO.getTag());
-        diyPost.setThumbnailurl(modifyRequestDTO.getThumbnailUrl());
+
+        String s3url= s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnailUrl());
+
+        diyPost.setThumbnailurl(s3url);
         return true;
 
     }

@@ -2,6 +2,7 @@ package kr.co.ouoe.DiyPost.dto;
 
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Setter
 @Getter
@@ -16,5 +17,5 @@ public class PostModifyRequestDTO {
     private String title;
     private String content;
     private String tag;
-    private String thumbnailUrl;
+    private MultipartFile thumbnailUrl;
 }
