@@ -141,5 +141,11 @@ public class upcyclePostController {
 
     }
 
+    @GetMapping("/posts/main")
+    public ResponseEntity<?> getUpcyclePostMain(){
+         PostTopListResponseDTO postTopListResponseDTO=upcyclePostService.getTopFivePost();
+        return ResponseEntity.ok().body(postTopListResponseDTO);
+    }
+
 
 }

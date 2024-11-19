@@ -1,10 +1,7 @@
 package kr.co.ouoe.DiyPost.service;
 
 
-import kr.co.ouoe.DiyPost.dto.PostListResponseDTO;
-import kr.co.ouoe.DiyPost.dto.PostModifyRequestDTO;
-import kr.co.ouoe.DiyPost.dto.PostRequestDTO;
-import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
+import kr.co.ouoe.DiyPost.dto.*;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
 import kr.co.ouoe.DiyPost.entity.LikeScore;
 import kr.co.ouoe.DiyPost.repository.DiyMeterialRepository;
@@ -262,6 +259,19 @@ public class upcyclePostService {
 
 
         return searchPostById(postId,tokenUserInfo);
+    }
+
+    public PostTopListResponseDTO   getTopFivePost(){
+        List<PostTopResponseDTO> postTopResponseDTOList=diyPostRepository.findTopFivePostTopResponse();
+
+        for(PostTopResponseDTO post:postTopResponseDTOList){
+            String nickname=userRepository.findById(post.getUserId()).get().getNickname();
+            post.setAuthor(nickname);
+        }
+        PostTopListResponseDTO postTopListResponseDTO= PostTopListResponseDTO.builder().boards(postTopResponseDTOList).build();
+        return postTopListResponseDTO;
+
+
     }
 //
 

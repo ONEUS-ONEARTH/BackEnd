@@ -2,7 +2,9 @@ package kr.co.ouoe.DiyPost.repository;
 
 
 import kr.co.ouoe.DiyPost.dto.PostResponseDTO;
+import kr.co.ouoe.DiyPost.dto.PostTopResponseDTO;
 import kr.co.ouoe.DiyPost.entity.DiyPost;
+import kr.co.ouoe.MeetingPost.dto.MeetingTopResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +28,8 @@ public interface DiyPostRepository extends JpaRepository<DiyPost, Long> {
     List<PostResponseDTO> findAllByuserId(long userId);
 
     Page<DiyPost> findAll(Pageable pageable);
+
+    @Query(value = "SELECT new kr.co.ouoe.DiyPost.dto.PostTopResponseDTO(" +
+            "d) FROM DiyPost d order by  d.likeScore DESC LIMIT 5")
+    List<PostTopResponseDTO> findTopFivePostTopResponse();
 }
