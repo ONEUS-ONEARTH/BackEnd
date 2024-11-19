@@ -1,8 +1,10 @@
 package kr.co.ouoe.MeetingPost.controller;
 
 
+import kr.co.ouoe.MeetingPost.dto.MeetingTopListResponseDTO;
 import kr.co.ouoe.MeetingPost.dto.map.MapListResponseDTO;
 import kr.co.ouoe.MeetingPost.service.MeetingMapService;
+import kr.co.ouoe.MeetingPost.service.MeetingPostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class MeetingMapController {
     @Autowired
     private MeetingMapService meetingMapService;
 
+    @Autowired
+    private MeetingPostService meetingPostService;
+
     @GetMapping("/map")
     public ResponseEntity<?> getMeetingMap(){
         // 전체 지도위치를 반환 합니다.
@@ -30,6 +35,13 @@ public class MeetingMapController {
     @GetMapping("/map/search/{do}/{si}")
     public ResponseEntity<?> searchMeetingMap(@RequestBody MapListResponseDTO search){
         return null;
+    }
+
+    @GetMapping("/map/main")
+    public ResponseEntity<?> getMeetingMapMain(){
+        //메인 페이지에 가장 좋아요 수를 많이 받은 5개를 반환 합니다.
+        MeetingTopListResponseDTO meetingTopListResponseDTO=meetingPostService.getTopFive();
+        return ResponseEntity.ok().body(meetingTopListResponseDTO);
     }
 
 }

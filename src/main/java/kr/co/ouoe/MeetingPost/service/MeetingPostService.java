@@ -1,14 +1,11 @@
 package kr.co.ouoe.MeetingPost.service;
 
 
+import kr.co.ouoe.MeetingPost.dto.*;
 import kr.co.ouoe.MeetingPost.entity.MeetingLikeScore;
 import kr.co.ouoe.MeetingPost.entity.MeetingLocate;
 import kr.co.ouoe.MeetingPost.entity.MeetingPost;
 import kr.co.ouoe.MeetingPost.entity.Option;
-import kr.co.ouoe.MeetingPost.dto.MeetingListResponseDTO;
-import kr.co.ouoe.MeetingPost.dto.MeetingPostModifyRequestDTO;
-import kr.co.ouoe.MeetingPost.dto.MeetingPostRequest;
-import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
 import kr.co.ouoe.MeetingPost.repository.MeetingLikeScoreRepository;
 import kr.co.ouoe.MeetingPost.repository.MeetingLocateRepository;
 import kr.co.ouoe.MeetingPost.repository.MeetingPostRepository;
@@ -278,6 +275,12 @@ public class MeetingPostService {
 
 
         return searchPostById(postId,tokenUserInfo);
+    }
+
+    public MeetingTopListResponseDTO getTopFive(){
+        List<MeetingTopResponseDTO> meetingTopResponseDTOList=meetingPostRepository.findTopFiveMeetingResponseDTO();
+        MeetingTopListResponseDTO meetingTopListResponseDTO=MeetingTopListResponseDTO.builder().boards(meetingTopResponseDTOList).build();
+        return meetingTopListResponseDTO;
     }
 
 

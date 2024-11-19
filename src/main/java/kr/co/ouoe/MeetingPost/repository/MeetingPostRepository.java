@@ -1,5 +1,6 @@
 package kr.co.ouoe.MeetingPost.repository;
 
+import kr.co.ouoe.MeetingPost.dto.MeetingTopResponseDTO;
 import kr.co.ouoe.MeetingPost.entity.MeetingPost;
 import kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,7 @@ public interface MeetingPostRepository extends JpaRepository<MeetingPost,Long> {
     @Query("Select new kr.co.ouoe.MeetingPost.dto.MeetingResponseDTO(" +
             "m )from MeetingPost m where m.userId= :userId ")
     List<MeetingResponseDTO> findAllMeetingResponseDTOByUserId(Long userId);
-
+    @Query(value = "SELECT new kr.co.ouoe.MeetingPost.dto.MeetingTopResponseDTO(" +
+            "m) FROM MeetingPost m order by  m.likeScore DESC LIMIT 5")
+    List<MeetingTopResponseDTO> findTopFiveMeetingResponseDTO();
 }
