@@ -126,8 +126,8 @@ public class MeetingPostService {
         meetingPost.setTitle(modifyRequestDTO.getTitle());
         meetingPost.setContent(modifyRequestDTO.getContent());
 
-        if(modifyRequestDTO.getThumbnail()!=null){
-            String s3Url=s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnail());
+        if(modifyRequestDTO.getThumbnailUrl()!=null){
+            String s3Url=s3Uploader.uploadFileToS3(modifyRequestDTO.getThumbnailUrl());
             meetingPost.setThumbNail(s3Url);
         }
 

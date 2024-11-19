@@ -117,6 +117,8 @@ public class MeetingPostController {
     @RequestMapping(method = {PUT,PATCH},path = "/modify")
     public ResponseEntity<?> UpdatePost(MeetingPostModifyRequestDTO modifyRequestDTO){
 
+        log.info("들어오나요??");
+
         try{
             boolean isupdate=meetingPostService.modifyPost(modifyRequestDTO);
             return ResponseEntity.ok().body(isupdate);
