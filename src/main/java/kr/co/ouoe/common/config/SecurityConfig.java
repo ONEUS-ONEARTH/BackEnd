@@ -45,7 +45,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/upcycle/modify"),
                                 new AntPathRequestMatcher("/api/upcycle/posts/**"),
                                 new AntPathRequestMatcher("/api/meeting/posts/**"),
-                                new AntPathRequestMatcher("/api/meeting/modify")
+                                new AntPathRequestMatcher("/api/meeting/modify"),
+                                new AntPathRequestMatcher("/api/meeting/map/**")
 
                         ).permitAll()
                         .anyRequest().authenticated())
