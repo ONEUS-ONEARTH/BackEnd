@@ -113,6 +113,7 @@ public class UserInfoservice {
         }
         PostListResponseDTO postListResponseDTO=PostListResponseDTO.builder()
                 .boards(postResponseDTOList)
+                .totalPost(postResponseDTOList.size())
                 .build();
         return postListResponseDTO;
 
@@ -147,7 +148,7 @@ public class UserInfoservice {
     //내가 쓴 미팅정보 게시물은 불러옵니다.
     public MeetingListResponseDTO  getMyMeetingPost(User user){
         List<MeetingResponseDTO> meetingResponseDTOList=meetingPostRepository.findAllMeetingResponseDTOByUserId(user.getId());
-        MeetingListResponseDTO meetingListResponseDTO=MeetingListResponseDTO.builder().boards(meetingResponseDTOList).build();
+        MeetingListResponseDTO meetingListResponseDTO=MeetingListResponseDTO.builder().boards(meetingResponseDTOList).totalPost(meetingResponseDTOList.size()).build();
         return meetingListResponseDTO;
     }
 }
