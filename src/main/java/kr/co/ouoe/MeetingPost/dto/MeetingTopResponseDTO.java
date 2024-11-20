@@ -29,7 +29,9 @@ public class MeetingTopResponseDTO {
     private String option; //개인인지 회사인지
     private String adress; //주소
     private int likeScore;
-    private MeetingLocate meetingLocate;
+   // private MeetingLocate meetingLocate;
+    private double x;
+    private double y;
 
     public MeetingTopResponseDTO(MeetingPost meetingPost) {
         this.id = meetingPost.getId();
@@ -40,7 +42,9 @@ public class MeetingTopResponseDTO {
         this.userId=meetingPost.getUserId();
         this.option=meetingPost.getOption().toString();
         this.likeScore=meetingPost.getLikeScore();
-        this.meetingLocate=meetingPost.getMeetingLocate();
+        this.x=meetingPost.getMeetingLocate().getX();
+        this.y=meetingPost.getMeetingLocate().getY();
+        this.adress=meetingPost.getMeetingLocate().getAddress();
 
     }
 
