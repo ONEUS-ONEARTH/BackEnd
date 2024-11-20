@@ -39,9 +39,6 @@ public class SecurityConfig {
                 .authorizeRequests( auth->auth
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/user/**"),
-                                new AntPathRequestMatcher("/api/upcycle/posts"),
-                                new AntPathRequestMatcher("/api/meeting/posts"),
-                                new AntPathRequestMatcher("/api/meeting/map"),
                                 new AntPathRequestMatcher("/api/upcycle/modify"),
                                 new AntPathRequestMatcher("/api/upcycle/posts/**"),
                                 new AntPathRequestMatcher("/api/meeting/posts/**"),
