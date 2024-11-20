@@ -20,6 +20,6 @@ public interface MeetingPostRepository extends JpaRepository<MeetingPost,Long> {
             "m )from MeetingPost m where m.userId= :userId ")
     List<MeetingResponseDTO> findAllMeetingResponseDTOByUserId(Long userId);
     @Query(value = "SELECT new kr.co.ouoe.MeetingPost.dto.MeetingTopResponseDTO(" +
-            "m) FROM MeetingPost m order by  m.likeScore DESC LIMIT 5")
+            "m) FROM MeetingPost m order by  m.likeScore DESC LIMIT 8")
     List<MeetingTopResponseDTO> findTopFiveMeetingResponseDTO();
 }

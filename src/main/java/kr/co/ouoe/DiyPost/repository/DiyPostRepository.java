@@ -30,6 +30,6 @@ public interface DiyPostRepository extends JpaRepository<DiyPost, Long> {
     Page<DiyPost> findAll(Pageable pageable);
 
     @Query(value = "SELECT new kr.co.ouoe.DiyPost.dto.PostTopResponseDTO(" +
-            "d) FROM DiyPost d order by  d.likeScore DESC LIMIT 5")
+            "d) FROM DiyPost d order by  d.likeScore DESC LIMIT 8")
     List<PostTopResponseDTO> findTopFivePostTopResponse();
 }
