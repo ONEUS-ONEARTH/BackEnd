@@ -203,8 +203,8 @@ public class MeetingPostService {
                 meetingResponseDTO.setContent(meetingPost.getContent());
                 meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
                 meetingResponseDTO.setEditable(true);
-                meetingResponseDTO.setAuthor(user.getNickname());
-                meetingResponseDTO.setUserId(user.getId());
+                meetingResponseDTO.setAuthor(writer.get().getNickname());
+                meetingResponseDTO.setUserId(writer.get().getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
                 meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
