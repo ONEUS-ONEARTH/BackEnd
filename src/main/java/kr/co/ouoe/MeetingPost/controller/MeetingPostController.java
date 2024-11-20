@@ -152,8 +152,25 @@ public class MeetingPostController {
 
     //모임 포스트 디테일 불러오기
     //업싸이클 디테일 보여주는 로직
+//    @GetMapping("/posts/{postId}")
+//    public ResponseEntity<?> showPostDeatil (@PathVariable Long postId){
+//        if (postId == null || postId.equals("")){
+//            return ResponseEntity
+//                    .badRequest()
+//                    .body(PostListResponseDTO.builder().error("postId는 공백 일 수 없습니다!").build());
+//        }try{
+//            MeetingResponseDTO postResponseDTO=meetingPostService.searchPostByIdWithNoToken(postId);
+//            return ResponseEntity.ok().body(postResponseDTO);
+//        }catch (Exception e){
+//
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//
+//
+//    }
+
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<?> showPostDeatil (@PathVariable Long postId,@AuthenticationPrincipal TokenUserInfo tokenUserInfo){
+    public ResponseEntity<?> showPostDeatil (@PathVariable Long postId, @AuthenticationPrincipal TokenUserInfo tokenUserInfo){
         if (postId == null || postId.equals("")){
             return ResponseEntity
                     .badRequest()
@@ -162,6 +179,7 @@ public class MeetingPostController {
             MeetingResponseDTO postResponseDTO=meetingPostService.searchPostById(postId,tokenUserInfo);
             return ResponseEntity.ok().body(postResponseDTO);
         }catch (Exception e){
+
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 

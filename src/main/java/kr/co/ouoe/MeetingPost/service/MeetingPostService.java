@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -185,28 +186,15 @@ public class MeetingPostService {
     public MeetingResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo) {
 
         MeetingPost meetingPost = meetingPostRepository.getOne(id);
+        Optional<User> writer=userRepository.findById(meetingPost.getUserId());
         // 이포스트에 따봉을 누른 유저
-        User user = userRepository.findByEmail(tokenUserInfo.getEmail());
+
         MeetingResponseDTO meetingResponseDTO;
         meetingResponseDTO = new MeetingResponseDTO();
-        if (tokenUserInfo == null) {
-            // 토큰이 없으면 로그인한 사용자가 아님
-            meetingResponseDTO.setId(meetingPost.getId());
-            meetingResponseDTO.setTitle(meetingPost.getTitle());
-            meetingResponseDTO.setContent(meetingPost.getContent());
-            meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
-            meetingResponseDTO.setEditable(false);
-            meetingResponseDTO.setAuthor(user.getNickname());
-            meetingResponseDTO.setUserId(user.getId());
-            meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
-            meetingResponseDTO.setOption(meetingPost.getOption().toString());
-            meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
-            meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
-            meetingResponseDTO.setCilcked(false);
-            //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
 
-        } else {
-           boolean cilcked= meetingLikeScoreRepository.existsMeetingLikeScoreByPostIdAndUserId(meetingPost.getId(), user.getId());
+        if(tokenUserInfo!=null){
+            User user = userRepository.findByEmail(tokenUserInfo.getEmail());
+            boolean cilcked= meetingLikeScoreRepository.existsMeetingLikeScoreByPostIdAndUserId(meetingPost.getId(), user.getId());
             if (tokenUserInfo.getEmail().equals(user.getEmail())) {
                 // 이게자기가 작성한거면
 
@@ -230,8 +218,8 @@ public class MeetingPostService {
                 meetingResponseDTO.setContent(meetingPost.getContent());
                 meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
                 meetingResponseDTO.setEditable(false);
-                meetingResponseDTO.setAuthor(user.getNickname());
-                meetingResponseDTO.setUserId(user.getId());
+                meetingResponseDTO.setAuthor(writer.get().getNickname());
+                meetingResponseDTO.setUserId(writer.get().getId());
                 meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
                 meetingResponseDTO.setOption(meetingPost.getOption().toString());
                 meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
@@ -240,10 +228,50 @@ public class MeetingPostService {
 
                 // meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
             }
+
+
+
+        }else{
+            meetingResponseDTO.setId(meetingPost.getId());
+            meetingResponseDTO.setTitle(meetingPost.getTitle());
+            meetingResponseDTO.setContent(meetingPost.getContent());
+            meetingResponseDTO.setCreateDate(meetingPost.getCreatedAt());
+            meetingResponseDTO.setEditable(false);
+            meetingResponseDTO.setAuthor(writer.get().getNickname());
+            meetingResponseDTO.setUserId(writer.get().getId());
+            meetingResponseDTO.setThumbnailUrl(meetingPost.getThumbNail());
+            meetingResponseDTO.setOption(meetingPost.getOption().toString());
+            meetingResponseDTO.setAdress(meetingPost.getMeetingLocate().getAddress());
+            meetingResponseDTO.setLikeScore(meetingPost.getLikeScore());
+            meetingResponseDTO.setCilcked(false);
+
+
         }
+
+
+
 
         return meetingResponseDTO;
     }
+
+
+    //토큰 없을 떄 메서드
+    public MeetingResponseDTO searchPostByIdWithNoToken(Long id) {
+
+        MeetingPost meetingPost = meetingPostRepository.getOne(id);
+        Optional<User> writer=userRepository.findById(meetingPost.getUserId());
+        MeetingResponseDTO meetingResponseDTO;
+        meetingResponseDTO = new MeetingResponseDTO();
+
+            // 토큰이 없으면 로그인한 사용자가 아님
+
+            //meetingResponseDTO.setMeetingId(meetingPost.getMeetingLocateId());
+
+
+
+        return meetingResponseDTO;
+    }
+
 
     //포스트 좋아요 업데이트
     public MeetingResponseDTO updateLikeScore(long postId, TokenUserInfo tokenUserInfo){
