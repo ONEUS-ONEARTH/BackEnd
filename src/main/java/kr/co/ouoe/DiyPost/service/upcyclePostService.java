@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -84,29 +85,14 @@ public class upcyclePostService {
     public  PostResponseDTO searchPostById(Long id, TokenUserInfo tokenUserInfo){
 
         DiyPost diyPost=diyPostRepository.getOne(id);
-        User user=userRepository.findByEmail(tokenUserInfo.getEmail());
+        Optional<User> writer=userRepository.findById(diyPost.getUserId());
+
         PostResponseDTO postResponseDTO;
 
-        if(tokenUserInfo==null){
-            postResponseDTO=PostResponseDTO.builder()
-                    .id(diyPost.getId())
-                    .title(diyPost.getTitle())
-                    .content(diyPost.getContent())
-                    .createdDate(diyPost.getCreatedAt())
-                    .author(user.getNickname())
-                    .likeScore(diyPost.getLikeScore())
-                    .thumbnailUrl(diyPost.getThumbnailurl())
-                    .userId(user.getId())
-                    .tag(diyPost.getTag())
-                    .isCilcked(false)
-                    .isEditable(false)
-                    .build();
-
-        }
-        else{
+        if(tokenUserInfo!=null){
+            User user=userRepository.findByEmail(tokenUserInfo.getEmail());
             boolean isClicked= likeScoreRepository.existsLikeScoreByPostIdAndUserId(diyPost.getId(), user.getId());
-            log.info("포스트 id {},유저 id{}",diyPost.getId(),diyPost.getUserId());
-            log.info("클릭 여부 {}",isClicked);
+
             if(tokenUserInfo.getEmail().equals(user.getEmail())){
 
                 postResponseDTO=PostResponseDTO.builder()
@@ -129,16 +115,36 @@ public class upcyclePostService {
                         .title(diyPost.getTitle())
                         .content(diyPost.getContent())
                         .likeScore(diyPost.getLikeScore())
+                        .userId(writer.get().getId())
                         .createdDate(diyPost.getCreatedAt())
                         .thumbnailUrl(diyPost.getThumbnailurl())
-                        .author(user.getNickname())
-                        .userId(user.getId())
+                        .author(writer.get().getNickname())
                         .tag(diyPost.getTag())
                         .isCilcked(isClicked)
                         .isEditable(false)
                         .build();
             }
+
         }
+        else{
+            postResponseDTO=PostResponseDTO.builder()
+                    .id(diyPost.getId())
+                    .title(diyPost.getTitle())
+                    .content(diyPost.getContent())
+                    .createdDate(diyPost.getCreatedAt())
+                    .author(writer.get().getNickname())
+                    .likeScore(diyPost.getLikeScore())
+                    .thumbnailUrl(diyPost.getThumbnailurl())
+                    .userId(writer.get().getId())
+                    .tag(diyPost.getTag())
+                    .isCilcked(false)
+                    .isEditable(false)
+                    .build();
+
+        }
+
+
+
 
         return postResponseDTO;
     }
