@@ -195,7 +195,7 @@ public class MeetingPostService {
         if(tokenUserInfo!=null){
             User user = userRepository.findByEmail(tokenUserInfo.getEmail());
             boolean cilcked= meetingLikeScoreRepository.existsMeetingLikeScoreByPostIdAndUserId(meetingPost.getId(), user.getId());
-            if (tokenUserInfo.getEmail().equals(user.getEmail())) {
+            if (tokenUserInfo.getEmail().equals(writer.get().getEmail())) {
                 // 이게자기가 작성한거면
 
                 meetingResponseDTO.setId(meetingPost.getId());
