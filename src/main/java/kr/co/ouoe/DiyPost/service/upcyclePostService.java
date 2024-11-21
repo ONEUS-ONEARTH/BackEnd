@@ -91,9 +91,10 @@ public class upcyclePostService {
 
         if(tokenUserInfo!=null){
             User user=userRepository.findByEmail(tokenUserInfo.getEmail());
+            log.info(writer.get().getNickname()+" "+user.getNickname());
             boolean isClicked= likeScoreRepository.existsLikeScoreByPostIdAndUserId(diyPost.getId(), user.getId());
 
-            if(tokenUserInfo.getEmail().equals(user.getEmail())){
+            if(tokenUserInfo.getEmail().equals(writer.get().getEmail())){
 
                 postResponseDTO=PostResponseDTO.builder()
                         .id(diyPost.getId())
@@ -102,8 +103,8 @@ public class upcyclePostService {
                         .createdDate(diyPost.getCreatedAt())
                         .likeScore(diyPost.getLikeScore())
                         .thumbnailUrl(diyPost.getThumbnailurl())
-                        .author(user.getNickname())
-                        .userId(user.getId())
+                        .author(writer.get().getNickname())
+                        .userId(writer.get().getId())
                         .isCilcked(isClicked)
                         .tag(diyPost.getTag())
                         .isEditable(true)
